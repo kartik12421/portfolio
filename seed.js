@@ -70,6 +70,22 @@ const seedData = {
     ],
     certifications: [
         {
+            name: 'Digital Fabrication and Rapid Prototyping Workshop',
+            path: '/images/prototyping.jpeg'
+        },
+        {
+            name: 'Group Discussion Competition',
+            path: '/images/gd.jpeg'
+        },
+        {
+            name: 'Microsoft - Cloud Computing Workshop (IIT Roorkee)',
+            path: '/images/microsoft.png'
+        },
+        {
+            name: 'Azure - Cloud Computing Workshop (IIT Roorkee)',
+            path: '/images/azur.png'
+        },
+        {
             name: 'National Hackathon - 2 Certificate',
             path: '/images/National-Hackathon-2.jpeg'
         },
@@ -82,19 +98,19 @@ const seedData = {
             path: '/images/Internal-Hackathon-5.jpeg'
         },
         {
-            name: 'Digital-Marketing-Workshop-(IIT Roorkee) Certificate',
+            name: 'Digital-Marketing-Workshop (IIT Roorkee) Certificate',
             path: '/images/Digital-Marketing-Workshop-(IIT Roorkee).jpeg'
         },
         {
-            name: 'Content-Creation-Workshop-(IIT Roorkee) Certificate',
+            name: 'Content-Creation-Workshop (IIT Roorkee) Certificate',
             path: '/images/Content-Creation-Workshop-(IIT Roorkee).jpeg'
         },
         {
-            name: 'IMS-workshop-(IIT Roorkee) Certificate',
+            name: 'IMS-workshop (IIT Roorkee) Certificate',
             path: '/images/IMS-workshop-(IIT Roorkee).jpeg'
         },
         {
-            name: 'Paytm-workshop-(IIT Roorkee) Certificate',
+            name: 'Paytm-workshop (IIT Roorkee) Certificate',
             path: '/images/Paytm-workshop-(IIT Roorkee).jpeg'
         },
         {
