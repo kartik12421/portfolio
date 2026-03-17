@@ -1,0 +1,130 @@
+:root {
+  --primary-color: #00ffff; /* Cyan */
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --card-bg: #1e1e1e;
+}
+
+.social-icons {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.social-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    margin-right: 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    transform: scale(1.1);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 0px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    flex: 1;
+}
+
+.form-control {
+  background-color: #343a40; /* Darker grey */
+  color: white;
+  border-color: #495057;
+}
+
+.form-control::placeholder {
+  color: #ced4da;
+}
+
+.navbar {
+  background-color: transparent;
+  border-bottom: 1px solid var(--primary-color);
+  position: static;
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+  color: var(--text-color);
+}
+
+.navbar-brand,
+.nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+.navbar-nav .nav-item {
+  margin-right: 15px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--primary-color);
+  color: var(--text-color);
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 255, 255, 0.4);
+}
+
+.card-title {
+  color: var(--primary-color);
+}
+
+.card-subtitle {
+  color: #ffffff !important;
+}
+
+.experience-years {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+footer {
+    background-color: #1c1c1c;
+    color: var(--text-color);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: black !important;
+}
+
+.btn-primary:hover {
+  background-color: #00e0e0;
+  border-color: #00e0e0;
+}
+
+a {
+  color: var(--primary-color);
+}
+
+footer a {
+  color: var(--primary-color) !important;
+}

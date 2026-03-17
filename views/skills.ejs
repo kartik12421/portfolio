@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+
+<div class="row text-center">
+    <h2>My Skills</h2>
+    <br><br><br>    <% personalInfo.skills.forEach(skill => { %>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a href="<%= skill.url %>" target="_blank" class="skill-card-link" style="text-decoration: none;">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="<%= skill.imageUrl %>" alt="<%= skill.name %> logo" class="img-fluid">
+                        <h5 class="card-title mt-3"><%= skill.name %></h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    <% }) %>
+</div>
+
+<%- include('partials/footer') %>

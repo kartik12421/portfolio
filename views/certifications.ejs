@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+<div class="row text-center">
+    <h2>My Certifications</h2>
+    <br><br><br>
+    <% personalInfo.certifications.forEach(cert => { %>
+        <div class="col-md-4 mb-4">
+            <div class="card certification-card">
+                <div class="card-body">
+                    <img src="<%= cert.path %>" alt="<%= cert.name %>" class="img-fluid certification-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-img-src="<%= cert.path %>" style="width: 300px; height: 200px; object-fit: cover;">
+                    <h5 class="card-title mt-3"><%= cert.name %></h5>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Certificate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="" class="img-fluid" id="enlargedImage" alt="Enlarged Certificate">
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

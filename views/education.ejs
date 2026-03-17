@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2>My Education</h2>
+        <p>Here's a detailed look at my academic journey.</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <% personalInfo.education.forEach(edu => { %>
+        <div class="col-md-12 mb-4">
+            <div class="card education-card">
+                <div class="card-body">
+                    <h4 class="card-title"><%= edu.degree %> at <%= edu.institution %></h4>
+                    <h6 class="card-subtitle mb-2 text-muted"><%= edu.years %></h6>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>
+
+<%- include('partials/footer') %>

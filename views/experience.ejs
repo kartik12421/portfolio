@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2>My Experience</h2>
+        <p>Here's a detailed look at my professional journey.</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <% personalInfo.experience.forEach(exp => { %>
+        <div class="col-md-12 mb-4">
+            <div class="card experience-card">
+                <div class="card-body">
+                    <h4 class="card-title"><%= exp.title %> at <%= exp.company %></h4>
+                    <h6 class="card-subtitle mb-2 text-muted"><span class="experience-years"><%= exp.years %></span></h6>
+                    <p class="card-text"><%= exp.description %></p>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>
+
+<%- include('partials/footer') %>
