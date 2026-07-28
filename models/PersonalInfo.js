@@ -18,20 +18,23 @@ const PersonalInfoSchema = new mongoose.Schema({
             title: String,
             description: String,
             github: String,
-            liveUrl: String
+            liveUrl: String,
+            npmUrl: String
         }
     ],
     education: [
         {
             institution: String,
             degree: String,
-            years: String
+            years: String,
+            details: String
         }
     ],
     certifications: [
         {
             name: String,
-            path: String
+            path: String,
+            url: String
         }
     ],
     experience: [

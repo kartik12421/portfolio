@@ -5,10 +5,19 @@
     <br><br><br>
     <% personalInfo.certifications.forEach(cert => { %>
         <div class="col-md-4 mb-4">
-            <div class="card certification-card">
-                <div class="card-body">
-                    <img src="<%= cert.path %>" alt="<%= cert.name %>" class="img-fluid certification-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-img-src="<%= cert.path %>" style="width: 300px; height: 200px; object-fit: cover;">
-                    <h5 class="card-title mt-3"><%= cert.name %></h5>
+            <div class="card certification-card h-100">
+                <div class="card-body d-flex flex-column align-items-center text-center">
+                    <% if (cert.path) { %>
+                        <img src="<%= cert.path %>" alt="<%= cert.name %>" class="img-fluid certification-img" data-bs-toggle="modal" data-bs-target="#imageModal" data-img-src="<%= cert.path %>" style="width: 300px; height: 200px; object-fit: cover; cursor: pointer; border-radius: 4px;">
+                    <% } else { %>
+                        <div class="certification-placeholder d-flex align-items-center justify-content-center" style="width: 300px; height: 200px; background-color: rgba(255, 255, 255, 0.05); border-radius: 4px; border: 1px dashed rgba(255, 255, 255, 0.2);">
+                            <i class="fas fa-award fa-3x" style="color: #00ffff;"></i>
+                        </div>
+                    <% } %>
+                    <h5 class="card-title mt-3 mb-auto"><%= cert.name %></h5>
+                    <% if (cert.url) { %>
+                        <a href="<%= cert.url %>" target="_blank" class="btn btn-outline-info btn-sm mt-3 w-100">View Certificate / Post</a>
+                    <% } %>
                 </div>
             </div>
         </div>

@@ -14,6 +14,9 @@
                 <div class="card-body">
                     <h4 class="card-title"><%= edu.degree %> at <%= edu.institution %></h4>
                     <h6 class="card-subtitle mb-2 text-muted"><%= edu.years %></h6>
+                    <% if (edu.details) { %>
+                        <p class="card-text"><%= edu.details %></p>
+                    <% } %>
                 </div>
             </div>
         </div>
