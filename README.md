@@ -53,7 +53,7 @@ portfolio/
 │   ├── index.css
 │   └── main.tsx
 ├── .env.example
-├── .env.local
+├── .env
 ├── netlify.toml             # Netlify deployment, redirect rules & functions config
 ├── package.json
 ├── server.js                # Local Express development API bridge
@@ -71,7 +71,7 @@ npm install
 ```
 
 ### 2. Configure Environment Variables
-Open `.env.local` and configure your credentials:
+Open `.env` and configure your credentials:
 
 ```env
 # Replace <db_password> with your actual MongoDB Atlas password
@@ -103,7 +103,7 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser.
    Ensure user `kartikjoshi842_db_user` has `Read and write to any database` privilege.
 2. In **Network Access**:
    Add IP `0.0.0.0/0` (Allow access from anywhere) so Netlify serverless functions and your local machine can connect securely.
-3. Replace `<db_password>` in `.env.local` or Netlify Environment Variables.
+3. Replace `<db_password>` in `.env` or Netlify Environment Variables.
 
 > **Resilient Fallback Built-In:** If `<db_password>` is not yet updated, the application continues to operate seamlessly in demo mode without throwing errors.
 

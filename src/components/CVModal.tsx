@@ -212,7 +212,7 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose }) => {
               {/* Technical Skills Overview */}
               <div>
                 <h2 className="text-xs font-mono uppercase tracking-widest text-cyan-400 print:text-blue-700 font-bold mb-3">
-                  Technical Core Competencies
+                  Technical Skills &amp; Tools
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   {skillCategories.map((cat) => (

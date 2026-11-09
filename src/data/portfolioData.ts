@@ -28,7 +28,7 @@ export const personalInfo = {
     "Express.js",
     "MongoDB",
     "TypeScript",
-    "Next.js",
+    "Tailwind CSS",
     "Docker",
     "AWS"
   ]
@@ -66,7 +66,7 @@ export const projects: Project[] = [
     description: "Conversational AI, code generation, web search, image generation, PDF RAG, and document generation in a modular AI-agent architecture.",
     category: ["all", "ai-saas", "full-stack"],
     techStack: [
-      "React / Next.js",
+      "React.js",
       "Node.js",
       "Express",
       "MongoDB",
@@ -150,89 +150,95 @@ export const projects: Project[] = [
 
 export const skillCategories: SkillCategory[] = [
   {
+    id: "languages",
     title: "Languages",
     subtitle: "Core programming fundamentals & typing",
     iconName: "Code2",
     skills: [
-      { name: "JavaScript (ES6+)", isPrimary: true },
-      { name: "TypeScript", isPrimary: true },
-      { name: "Java", isPrimary: true },
-      { name: "SQL", isPrimary: false },
-      { name: "PHP", isPrimary: false }
+      { name: "JavaScript (ES6+)", category: "Languages", isPrimary: true, color: "#F7DF1E", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+      { name: "TypeScript", category: "Languages", isPrimary: true, color: "#3178C6", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+      { name: "Java", category: "Languages", isPrimary: true, color: "#ED8B00", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
+      { name: "SQL", category: "Languages", isPrimary: false, color: "#4479A1", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
+      { name: "PHP", category: "Languages", isPrimary: false, color: "#777BB4", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" }
     ]
   },
   {
+    id: "frontend",
     title: "Frontend",
     subtitle: "Modern, reactive & accessible user interfaces",
     iconName: "Layout",
     skills: [
-      { name: "React.js", isPrimary: true },
-      { name: "Next.js", isPrimary: true },
-      { name: "Tailwind CSS", isPrimary: true },
-      { name: "Redux Toolkit", isPrimary: true },
-      { name: "HTML5 & CSS3", isPrimary: false },
-      { name: "Bootstrap", isPrimary: false },
-      { name: "Vite", isPrimary: false }
+      { name: "React.js", category: "Frontend", isPrimary: true, color: "#61DAFB", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+      { name: "Tailwind CSS", category: "Frontend", isPrimary: true, color: "#06B6D4", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
+      { name: "Redux Toolkit", category: "Frontend", isPrimary: true, color: "#764ABC", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" },
+      { name: "HTML5 & CSS3", category: "Frontend", isPrimary: false, color: "#E34F26", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
+      { name: "Bootstrap", category: "Frontend", isPrimary: false, color: "#7952B3", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
+      { name: "Vite", category: "Frontend", isPrimary: false, color: "#646CFF", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" }
     ]
   },
   {
+    id: "backend",
     title: "Backend",
     subtitle: "Robust servers, security & clean architectures",
     iconName: "Server",
     skills: [
-      { name: "Node.js", isPrimary: true },
-      { name: "Express.js", isPrimary: true },
-      { name: "REST APIs", isPrimary: true },
-      { name: "JWT Authentication", isPrimary: true },
-      { name: "Session Management", isPrimary: false },
-      { name: "MVC Architecture", isPrimary: false }
+      { name: "Node.js", category: "Backend", isPrimary: true, color: "#339933", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+      { name: "Express.js", category: "Backend", isPrimary: true, color: "#FFFFFF", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
+      { name: "REST APIs", category: "Backend", isPrimary: true, color: "#0EA5E9", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" },
+      { name: "JWT Authentication", category: "Backend", isPrimary: true, color: "#D63AFF", imageUrl: "https://jwt.io/img/pic_logo.svg" },
+      { name: "Session Management", category: "Backend", isPrimary: false, color: "#F59E0B", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oauth/oauth-original.svg" },
+      { name: "MVC Architecture", category: "Backend", isPrimary: false, color: "#8B5CF6", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg" }
     ]
   },
   {
+    id: "databases",
     title: "Databases",
     subtitle: "Relational, document & vector data stores",
     iconName: "Database",
     skills: [
-      { name: "MongoDB", isPrimary: true },
-      { name: "MySQL", isPrimary: false },
-      { name: "PostgreSQL", isPrimary: false },
-      { name: "Redis", isPrimary: false },
-      { name: "Vector Databases", isPrimary: true }
+      { name: "MongoDB", category: "Databases", isPrimary: true, color: "#47A248", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+      { name: "MySQL", category: "Databases", isPrimary: false, color: "#4479A1", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
+      { name: "PostgreSQL", category: "Databases", isPrimary: false, color: "#4169E1", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
+      { name: "Redis", category: "Databases", isPrimary: false, color: "#DC382D", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" },
+      { name: "Vector Databases", category: "Databases", isPrimary: true, color: "#10B981", imageUrl: "https://avatars.githubusercontent.com/u/74641908?s=200&v=4" }
     ]
   },
   {
+    id: "ai",
     title: "AI & Machine Learning",
     subtitle: "LLM agents, RAG & cognitive integrations",
     iconName: "Cpu",
     skills: [
-      { name: "LangChain", isPrimary: true },
-      { name: "LangGraph", isPrimary: true },
-      { name: "RAG Systems", isPrimary: true },
-      { name: "AI APIs (OpenAI, OpenRouter)", isPrimary: true }
+      { name: "LangChain", category: "AI & ML", isPrimary: true, color: "#22D3EE", imageUrl: "https://avatars.githubusercontent.com/u/126733545?s=200&v=4" },
+      { name: "LangGraph", category: "AI & ML", isPrimary: true, color: "#EC4899", imageUrl: "https://raw.githubusercontent.com/langchain-ai/langchain/master/docs/static/img/parrot-icon.svg" },
+      { name: "RAG Systems", category: "AI & ML", isPrimary: true, color: "#F43F5E", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" },
+      { name: "AI APIs (OpenAI, OpenRouter)", category: "AI & ML", isPrimary: true, color: "#10A37F", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openai/openai-original.svg" }
     ]
   },
   {
+    id: "cloud-devops",
     title: "Cloud & DevOps",
     subtitle: "Containerization, CI/CD & cloud infrastructure",
     iconName: "Terminal",
     skills: [
-      { name: "Docker", isPrimary: true },
-      { name: "GitHub Actions", isPrimary: true },
-      { name: "CI / CD Pipelines", isPrimary: true },
-      { name: "AWS S3", isPrimary: true },
-      { name: "Nginx", isPrimary: false },
-      { name: "Render", isPrimary: false }
+      { name: "Docker", category: "Cloud & DevOps", isPrimary: true, color: "#2496ED", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
+      { name: "GitHub Actions", category: "Cloud & DevOps", isPrimary: true, color: "#2088FF", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" },
+      { name: "CI / CD Pipelines", category: "Cloud & DevOps", isPrimary: true, color: "#F59E0B", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg" },
+      { name: "AWS S3", category: "Cloud & DevOps", isPrimary: true, color: "#FF9900", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
+      { name: "Nginx", category: "Cloud & DevOps", isPrimary: false, color: "#009639", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" },
+      { name: "Render", category: "Cloud & DevOps", isPrimary: false, color: "#46E3B7", imageUrl: "https://avatars.githubusercontent.com/u/36424661?s=200&v=4" }
     ]
   },
   {
+    id: "tools",
     title: "Developer Tools",
     subtitle: "Collaboration, workflow & quality assurance",
     iconName: "Wrench",
     skills: [
-      { name: "Git & GitHub", isPrimary: true },
-      { name: "Postman", isPrimary: true },
-      { name: "Firebase Auth", isPrimary: false },
-      { name: "API Testing", isPrimary: true }
+      { name: "Git & GitHub", category: "Developer Tools", isPrimary: true, color: "#F05032", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+      { name: "Postman", category: "Developer Tools", isPrimary: true, color: "#FF6C37", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" },
+      { name: "Firebase Auth", category: "Developer Tools", isPrimary: false, color: "#FFCA28", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" },
+      { name: "API Testing", category: "Developer Tools", isPrimary: true, color: "#38BDF8", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" }
     ]
   }
 ];

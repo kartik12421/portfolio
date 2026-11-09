@@ -15,15 +15,20 @@ export interface Project {
   badge?: string;
 }
 
+export interface SkillItem {
+  name: string;
+  category: string;
+  imageUrl?: string;
+  isPrimary?: boolean;
+  color?: string;
+}
+
 export interface SkillCategory {
+  id: string;
   title: string;
   subtitle: string;
   iconName: string;
-  skills: {
-    name: string;
-    level?: string;
-    isPrimary?: boolean;
-  }[];
+  skills: SkillItem[];
 }
 
 export interface ExperienceItem {

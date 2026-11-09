@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { MongoClient } from 'mongodb';
 
-dotenv.config({ path: '.env.local' });
+dotenv.config({ path: '.env' });
 dotenv.config();
 
 const app = express();
