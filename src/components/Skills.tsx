@@ -181,7 +181,7 @@ export const Skills: React.FC = () => {
         {viewLayout === 'grid' && (
           <motion.div
             layout
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
           >
             <AnimatePresence mode="popLayout">
               {filteredSkills.map((skill, index) => (
@@ -250,7 +250,7 @@ export const Skills: React.FC = () => {
                 </div>
 
                 {/* Skills Grid within Category */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
                   {cat.skills.map((skill) => (
                     <div
                       key={skill.name}

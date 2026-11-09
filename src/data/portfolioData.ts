@@ -152,52 +152,45 @@ export const skillCategories: SkillCategory[] = [
   {
     id: "languages",
     title: "Languages",
-    subtitle: "Core programming fundamentals & typing",
+    subtitle: "Core programming languages & typing",
     iconName: "Code2",
     skills: [
       { name: "JavaScript (ES6+)", category: "Languages", isPrimary: true, color: "#F7DF1E", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
       { name: "TypeScript", category: "Languages", isPrimary: true, color: "#3178C6", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
       { name: "Java", category: "Languages", isPrimary: true, color: "#ED8B00", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
-      { name: "SQL", category: "Languages", isPrimary: false, color: "#4479A1", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
-      { name: "PHP", category: "Languages", isPrimary: false, color: "#777BB4", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" }
+      { name: "SQL", category: "Languages", isPrimary: false, color: "#4479A1", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" }
     ]
   },
   {
     id: "frontend",
     title: "Frontend",
-    subtitle: "Modern, reactive & accessible user interfaces",
+    subtitle: "Modern, reactive UI engineering",
     iconName: "Layout",
     skills: [
       { name: "React.js", category: "Frontend", isPrimary: true, color: "#61DAFB", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
       { name: "Tailwind CSS", category: "Frontend", isPrimary: true, color: "#06B6D4", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
-      { name: "Redux Toolkit", category: "Frontend", isPrimary: true, color: "#764ABC", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" },
-      { name: "HTML5 & CSS3", category: "Frontend", isPrimary: false, color: "#E34F26", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-      { name: "Bootstrap", category: "Frontend", isPrimary: false, color: "#7952B3", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
-      { name: "Vite", category: "Frontend", isPrimary: false, color: "#646CFF", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" }
+      { name: "Redux Toolkit", category: "Frontend", isPrimary: true, color: "#764ABC", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" }
     ]
   },
   {
     id: "backend",
-    title: "Backend",
-    subtitle: "Robust servers, security & clean architectures",
+    title: "Backend & APIs",
+    subtitle: "Scalable server architectures & security",
     iconName: "Server",
     skills: [
       { name: "Node.js", category: "Backend", isPrimary: true, color: "#339933", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
       { name: "Express.js", category: "Backend", isPrimary: true, color: "#FFFFFF", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
       { name: "REST APIs", category: "Backend", isPrimary: true, color: "#0EA5E9", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" },
-      { name: "JWT Authentication", category: "Backend", isPrimary: true, color: "#D63AFF", imageUrl: "https://jwt.io/img/pic_logo.svg" },
-      { name: "Session Management", category: "Backend", isPrimary: false, color: "#F59E0B", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oauth/oauth-original.svg" },
-      { name: "MVC Architecture", category: "Backend", isPrimary: false, color: "#8B5CF6", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg" }
+      { name: "JWT Authentication", category: "Backend", isPrimary: true, color: "#D63AFF", imageUrl: "https://jwt.io/img/pic_logo.svg" }
     ]
   },
   {
     id: "databases",
     title: "Databases",
-    subtitle: "Relational, document & vector data stores",
+    subtitle: "Document, relational & vector data stores",
     iconName: "Database",
     skills: [
       { name: "MongoDB", category: "Databases", isPrimary: true, color: "#47A248", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-      { name: "MySQL", category: "Databases", isPrimary: false, color: "#4479A1", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
       { name: "PostgreSQL", category: "Databases", isPrimary: false, color: "#4169E1", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
       { name: "Redis", category: "Databases", isPrimary: false, color: "#DC382D", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" },
       { name: "Vector Databases", category: "Databases", isPrimary: true, color: "#10B981", imageUrl: "https://avatars.githubusercontent.com/u/74641908?s=200&v=4" }
@@ -206,7 +199,7 @@ export const skillCategories: SkillCategory[] = [
   {
     id: "ai",
     title: "AI & Machine Learning",
-    subtitle: "LLM agents, RAG & cognitive integrations",
+    subtitle: "LLM agents, RAG pipelines & multi-model APIs",
     iconName: "Cpu",
     skills: [
       { name: "LangChain", category: "AI & ML", isPrimary: true, color: "#22D3EE", imageUrl: "https://avatars.githubusercontent.com/u/126733545?s=200&v=4" },
@@ -218,27 +211,23 @@ export const skillCategories: SkillCategory[] = [
   {
     id: "cloud-devops",
     title: "Cloud & DevOps",
-    subtitle: "Containerization, CI/CD & cloud infrastructure",
+    subtitle: "Containerization & automated CI/CD deployment",
     iconName: "Terminal",
     skills: [
       { name: "Docker", category: "Cloud & DevOps", isPrimary: true, color: "#2496ED", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
-      { name: "GitHub Actions", category: "Cloud & DevOps", isPrimary: true, color: "#2088FF", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" },
-      { name: "CI / CD Pipelines", category: "Cloud & DevOps", isPrimary: true, color: "#F59E0B", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg" },
       { name: "AWS S3", category: "Cloud & DevOps", isPrimary: true, color: "#FF9900", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
-      { name: "Nginx", category: "Cloud & DevOps", isPrimary: false, color: "#009639", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" },
-      { name: "Render", category: "Cloud & DevOps", isPrimary: false, color: "#46E3B7", imageUrl: "https://avatars.githubusercontent.com/u/36424661?s=200&v=4" }
+      { name: "GitHub Actions", category: "Cloud & DevOps", isPrimary: true, color: "#2088FF", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" }
     ]
   },
   {
     id: "tools",
     title: "Developer Tools",
-    subtitle: "Collaboration, workflow & quality assurance",
+    subtitle: "Version control & API workflows",
     iconName: "Wrench",
     skills: [
       { name: "Git & GitHub", category: "Developer Tools", isPrimary: true, color: "#F05032", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
       { name: "Postman", category: "Developer Tools", isPrimary: true, color: "#FF6C37", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" },
-      { name: "Firebase Auth", category: "Developer Tools", isPrimary: false, color: "#FFCA28", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" },
-      { name: "API Testing", category: "Developer Tools", isPrimary: true, color: "#38BDF8", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" }
+      { name: "Firebase Auth", category: "Developer Tools", isPrimary: false, color: "#FFCA28", imageUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" }
     ]
   }
 ];
