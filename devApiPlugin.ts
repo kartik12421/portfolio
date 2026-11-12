@@ -15,6 +15,14 @@ function sanitizeUri(rawUri: string) {
   if (clean.includes('mongodb+srv://kartikjoshi842_db_user:mongodb+srv://')) {
     clean = clean.replace('mongodb+srv://kartikjoshi842_db_user:mongodb+srv://', 'mongodb+srv://');
   }
+  if (clean.includes('@cluster0.pwvqkig.mongodb.net/@cluster0.pwvqkig.mongodb.net')) {
+    clean = clean.replace('@cluster0.pwvqkig.mongodb.net/@cluster0.pwvqkig.mongodb.net', '@cluster0.pwvqkig.mongodb.net');
+  }
+  if (!clean.includes('retryWrites=true')) {
+    clean += clean.includes('?') 
+      ? '&retryWrites=true&w=majority' 
+      : (clean.endsWith('/') ? 'portfolio?retryWrites=true&w=majority' : '/portfolio?retryWrites=true&w=majority');
+  }
   return clean;
 }
 

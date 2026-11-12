@@ -6,8 +6,19 @@ let cachedDb = null;
 function sanitizeUri(rawUri) {
   if (!rawUri) return '';
   let clean = rawUri.trim();
+  // Fix duplicated protocol/user from accidental copy-paste
   if (clean.includes('mongodb+srv://kartikjoshi842_db_user:mongodb+srv://')) {
     clean = clean.replace('mongodb+srv://kartikjoshi842_db_user:mongodb+srv://', 'mongodb+srv://');
+  }
+  // Fix duplicated cluster hostname from accidental copy-paste
+  if (clean.includes('@cluster0.pwvqkig.mongodb.net/@cluster0.pwvqkig.mongodb.net')) {
+    clean = clean.replace('@cluster0.pwvqkig.mongodb.net/@cluster0.pwvqkig.mongodb.net', '@cluster0.pwvqkig.mongodb.net');
+  }
+  // Ensure query parameters and database target
+  if (!clean.includes('retryWrites=true')) {
+    clean += clean.includes('?') 
+      ? '&retryWrites=true&w=majority' 
+      : (clean.endsWith('/') ? 'portfolio?retryWrites=true&w=majority' : '/portfolio?retryWrites=true&w=majority');
   }
   return clean;
 }
@@ -28,7 +39,9 @@ async function connectToDatabase() {
   try {
     const client = new MongoClient(uri, {
       maxPoolSize: 10,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 6000,
+      connectTimeoutMS: 6000,
+      tls: true,
     });
     await client.connect();
     const db = client.db(dbName);
