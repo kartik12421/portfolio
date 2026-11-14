@@ -56,11 +56,14 @@ export const Contact: React.FC = () => {
     setCommentsLoading(true);
     try {
       const res = await fetchComments();
-      if (res.comments) {
+      if (res && Array.isArray(res.comments)) {
         setComments(res.comments);
+      } else {
+        setComments([]);
       }
     } catch (err) {
       console.error('Error fetching comments:', err);
+      setComments([]);
     } finally {
       setCommentsLoading(false);
     }
