@@ -3,6 +3,11 @@
 // delivery even when Netlify environment variables are not configured.
 const FALLBACK_WEB3FORMS_KEY = '8f5139fc-4666-49f2-bea9-22afc5349d65';
 
+// Some providers challenge requests from serverless/datacenter IPs that carry
+// the default undici User-Agent; a browser-like UA avoids the bot challenge.
+const BROWSER_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+
 export const handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -47,7 +52,12 @@ export const handler = async (event) => {
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'User-Agent': BROWSER_UA,
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
         body: JSON.stringify({
           access_key: web3formsKey,
           name,
@@ -58,8 +68,15 @@ export const handler = async (event) => {
           from_name: 'Kartik Joshi Portfolio Contact Form',
         }),
       });
-      const result = await response.json();
-      if (result.success) {
+      const text = await response.text();
+      let result;
+      try {
+        result = JSON.parse(text);
+      } catch {
+        attempts.push(`web3forms: non-JSON HTTP ${response.status} -> ${text.slice(0, 160)}`);
+        result = null;
+      }
+      if (result && result.success) {
         return {
           statusCode: 200,
           headers,
@@ -70,7 +87,7 @@ export const handler = async (event) => {
           }),
         };
       }
-      attempts.push(`web3forms: ${result.message || 'rejected'}`);
+      if (result) attempts.push(`web3forms: ${result.message || 'rejected'}`);
     } catch (err) {
       attempts.push(`web3forms: ${err.message}`);
     }
@@ -119,6 +136,8 @@ export const handler = async (event) => {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'User-Agent': BROWSER_UA,
+          'Accept-Language': 'en-US,en;q=0.9',
           'Origin': 'https://portfolio-by-kj.netlify.app',
           'Referer': 'https://portfolio-by-kj.netlify.app/',
         },
@@ -132,8 +151,15 @@ export const handler = async (event) => {
         }),
       });
 
-      const result = await formSubmitRes.json();
-      if (result.success === 'true' || result.success === true) {
+      const fsText = await formSubmitRes.text();
+      let result;
+      try {
+        result = JSON.parse(fsText);
+      } catch {
+        attempts.push(`formsubmit: non-JSON HTTP ${formSubmitRes.status} -> ${fsText.slice(0, 160)}`);
+        result = null;
+      }
+      if (result && (result.success === 'true' || result.success === true)) {
         return {
           statusCode: 200,
           headers,
@@ -144,7 +170,7 @@ export const handler = async (event) => {
           }),
         };
       }
-      attempts.push(`formsubmit: ${result.message || 'rejected'}`);
+      if (result) attempts.push(`formsubmit: ${result.message || 'rejected'}`);
     } catch (fsErr) {
       attempts.push(`formsubmit: ${fsErr.message}`);
     }
