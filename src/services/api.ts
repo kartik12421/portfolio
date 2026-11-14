@@ -128,14 +128,38 @@ export async function submitComment(commentData: {
 }
 
 /**
- * Send Contact Message directly to kartikjoshi842@gmail.com
+ * Send Contact Message to kartikjoshi842@gmail.com.
+ * Tries the serverless endpoint first (it has the Web3Forms key), then falls
+ * back to a direct browser -> FormSubmit call, then Netlify's native form.
+ * Returns success:false if nothing actually delivered, so the UI never
+ * shows a fake confirmation.
  */
 export async function sendContactMessage(formData: ContactFormData): Promise<{
   success: boolean;
   message: string;
   method?: string;
 }> {
-  // Option 1: Direct FormSubmit.co browser call (Delivers straight to kartikjoshi842@gmail.com with 0 keys!)
+  // Option 1: Serverless Netlify endpoint (Web3Forms -> Resend -> FormSubmit)
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json().catch(() => null);
+    if (res.ok && data?.success) {
+      return {
+        success: true,
+        message: data.message || 'Thank you! Your message was delivered to Kartik.',
+        method: data.method,
+      };
+    }
+  } catch (err) {
+    console.info('Serverless contact endpoint unreachable, trying direct FormSubmit...');
+  }
+
+  // Option 2: Direct FormSubmit.co browser call (browser sends Origin/Referer itself)
   try {
     const fsResponse = await fetch('https://formsubmit.co/ajax/kartikjoshi842@gmail.com', {
       method: 'POST',
@@ -164,34 +188,12 @@ export async function sendContactMessage(formData: ContactFormData): Promise<{
       }
     }
   } catch (fsErr) {
-    console.info('Direct FormSubmit attempt bypassed, trying API route...');
-  }
-
-  // Option 2: Serverless Netlify endpoint
-  try {
-    const res = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success) {
-        return {
-          success: true,
-          message: data.message || 'Thank you! Your message was delivered to Kartik.',
-          method: data.method,
-        };
-      }
-    }
-  } catch (err) {
-    // fallback
+    console.info('Direct FormSubmit attempt bypassed, trying Netlify form...');
   }
 
   // Option 3: Netlify native form submission fallback
   try {
-    await fetch('/', {
+    const nf = await fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
@@ -202,13 +204,21 @@ export async function sendContactMessage(formData: ContactFormData): Promise<{
         message: formData.message,
       }).toString(),
     });
+
+    if (nf.ok) {
+      return {
+        success: true,
+        message: 'Thank you! Your message has been sent to Kartik Joshi.',
+        method: 'netlify_form',
+      };
+    }
   } catch {
     // ignore
   }
 
   return {
-    success: true,
-    message: 'Thank you! Your message has been sent to Kartik Joshi.',
-    method: 'guaranteed_delivery',
+    success: false,
+    message: 'Unable to send your message right now. Please email directly at kartikjoshi842@gmail.com.',
+    method: 'failed',
   };
 }

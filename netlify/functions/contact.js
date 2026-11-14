@@ -1,3 +1,8 @@
+// Web3Forms access key is public by design (it only lets people send you mail).
+// Environment variables take precedence; this fallback guarantees production
+// delivery even when Netlify environment variables are not configured.
+const FALLBACK_WEB3FORMS_KEY = '8f5139fc-4666-49f2-bea9-22afc5349d65';
+
 export const handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -31,35 +36,43 @@ export const handler = async (event) => {
     }
 
     const recipient = process.env.CONTACT_RECEIVER_EMAIL || 'kartikjoshi842@gmail.com';
-    const web3formsKey = process.env.VITE_WEB3FORMS_ACCESS_KEY || process.env.WEB3FORMS_ACCESS_KEY;
+    const web3formsKey =
+      process.env.VITE_WEB3FORMS_ACCESS_KEY ||
+      process.env.WEB3FORMS_ACCESS_KEY ||
+      FALLBACK_WEB3FORMS_KEY;
     const resendKey = process.env.RESEND_API_KEY;
+    const attempts = [];
 
-    // Pipeline 1: Web3Forms if key provided
-    if (web3formsKey) {
-      try {
-        const response = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    // Pipeline 1: Web3Forms (primary)
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: web3formsKey,
+          name,
+          email,
+          message,
+          replyto: email,
+          subject: subject || `Portfolio Contact from ${name} (${email})`,
+          from_name: 'Kartik Joshi Portfolio Contact Form',
+        }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        return {
+          statusCode: 200,
+          headers,
           body: JSON.stringify({
-            access_key: web3formsKey,
-            name,
-            email,
-            message,
-            subject: subject || `Portfolio Contact from ${name} (${email})`,
-            from_name: 'Kartik Joshi Portfolio Contact Form',
+            success: true,
+            method: 'web3forms',
+            message: 'Message sent successfully to Kartik!',
           }),
-        });
-        const result = await response.json();
-        if (result.success) {
-          return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify({ success: true, message: 'Message sent successfully to Kartik!' }),
-          };
-        }
-      } catch (err) {
-        console.warn('Web3Forms dispatch warning:', err.message);
+        };
       }
+      attempts.push(`web3forms: ${result.message || 'rejected'}`);
+    } catch (err) {
+      attempts.push(`web3forms: ${err.message}`);
     }
 
     // Pipeline 2: Resend API if key provided
@@ -90,15 +103,16 @@ export const handler = async (event) => {
           return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ success: true, message: 'Email delivered to Kartik!' }),
+            body: JSON.stringify({ success: true, method: 'resend', message: 'Email delivered to Kartik!' }),
           };
         }
+        attempts.push(`resend: HTTP ${resendRes.status}`);
       } catch (err) {
-        console.warn('Resend dispatch warning:', err.message);
+        attempts.push(`resend: ${err.message}`);
       }
     }
 
-    // Pipeline 3: FormSubmit.co (Zero-key direct forwarding to kartikjoshi842@gmail.com)
+    // Pipeline 3: FormSubmit.co (zero-key direct forwarding)
     try {
       const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
         method: 'POST',
@@ -125,21 +139,25 @@ export const handler = async (event) => {
           headers,
           body: JSON.stringify({
             success: true,
+            method: 'formsubmit',
             message: 'Thank you! Your message was sent directly to Kartik.',
           }),
         };
       }
+      attempts.push(`formsubmit: ${result.message || 'rejected'}`);
     } catch (fsErr) {
-      console.warn('FormSubmit dispatch warning:', fsErr.message);
+      attempts.push(`formsubmit: ${fsErr.message}`);
     }
 
-    // Guaranteed success response
+    // Every pipeline failed: report honestly instead of faking success,
+    // so failures show up here and in Netlify function logs.
+    console.error('Contact delivery failed:', attempts.join(' | '));
     return {
-      statusCode: 200,
+      statusCode: 502,
       headers,
       body: JSON.stringify({
-        success: true,
-        message: 'Thank you! Your message has been sent to Kartik Joshi.',
+        success: false,
+        error: `Unable to deliver your message right now. Please email directly at ${recipient}.`,
       }),
     };
   } catch (error) {
