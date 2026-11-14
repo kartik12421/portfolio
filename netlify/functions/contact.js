@@ -158,6 +158,7 @@ export const handler = async (event) => {
       body: JSON.stringify({
         success: false,
         error: `Unable to deliver your message right now. Please email directly at ${recipient}.`,
+        attempts,
       }),
     };
   } catch (error) {
