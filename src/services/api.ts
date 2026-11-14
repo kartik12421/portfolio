@@ -127,19 +127,62 @@ export async function submitComment(commentData: {
   };
 }
 
+// Web3Forms access key is public by design (it only lets people send you mail).
+// Embedded because .env is gitignored, so the key never reaches the Netlify build.
+const WEB3FORMS_KEY =
+  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '8f5139fc-4666-49f2-bea9-22afc5349d65';
+
 /**
  * Send Contact Message to kartikjoshi842@gmail.com.
- * Tries the serverless endpoint first (it has the Web3Forms key), then falls
- * back to a direct browser -> FormSubmit call, then Netlify's native form.
- * Returns success:false if nothing actually delivered, so the UI never
- * shows a fake confirmation.
+ * Tries the browser -> Web3Forms path first (Web3Forms is built for browser
+ * calls, and Netlify's serverless IPs get Cloudflare-challenged by form
+ * providers), then the serverless endpoint, then FormSubmit, then Netlify's
+ * native form. Returns success:false if nothing actually delivered, so the UI
+ * never shows a fake confirmation.
  */
 export async function sendContactMessage(formData: ContactFormData): Promise<{
   success: boolean;
   message: string;
   method?: string;
 }> {
-  // Option 1: Serverless Netlify endpoint (Web3Forms -> Resend -> FormSubmit)
+  // Option 1: Browser -> Web3Forms (primary; designed for static sites)
+  try {
+    const w3Response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        replyto: formData.email,
+        subject: formData.subject || `Portfolio Contact from ${formData.name} (${formData.email})`,
+        from_name: 'Kartik Joshi Portfolio Contact Form',
+      }),
+    });
+
+    const w3Text = await w3Response.text();
+    let w3Result: any = null;
+    try {
+      w3Result = JSON.parse(w3Text);
+    } catch {
+      // non-JSON response (e.g. challenge page) -> fall through
+    }
+    if (w3Result?.success) {
+      return {
+        success: true,
+        message: 'Thank you! Your message was delivered to Kartik.',
+        method: 'web3forms_browser',
+      };
+    }
+  } catch (err) {
+    console.info('Browser Web3Forms attempt failed, trying serverless endpoint...');
+  }
+
+  // Option 2: Serverless Netlify endpoint (Web3Forms -> Resend -> FormSubmit)
   try {
     const res = await fetch('/api/contact', {
       method: 'POST',
@@ -159,7 +202,7 @@ export async function sendContactMessage(formData: ContactFormData): Promise<{
     console.info('Serverless contact endpoint unreachable, trying direct FormSubmit...');
   }
 
-  // Option 2: Direct FormSubmit.co browser call (browser sends Origin/Referer itself)
+  // Option 3: Direct FormSubmit.co browser call (browser sends Origin/Referer itself)
   try {
     const fsResponse = await fetch('https://formsubmit.co/ajax/kartikjoshi842@gmail.com', {
       method: 'POST',
@@ -191,7 +234,7 @@ export async function sendContactMessage(formData: ContactFormData): Promise<{
     console.info('Direct FormSubmit attempt bypassed, trying Netlify form...');
   }
 
-  // Option 3: Netlify native form submission fallback
+  // Option 4: Netlify native form submission fallback
   try {
     const nf = await fetch('/', {
       method: 'POST',
