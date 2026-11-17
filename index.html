@@ -1,17 +1,18 @@
 <!doctype html>
-<html lang="en" class="scroll-smooth dark">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <!-- Primary Meta Tags -->
     <title>Kartik Joshi — Full-Stack MERN & AI Developer</title>
     <meta name="title" content="Kartik Joshi — Full-Stack MERN & AI Developer" />
     <meta name="description" content="Portfolio of Kartik Joshi, a full-stack MERN and AI-focused developer building production-grade web apps, scalable microservices, and LLM-powered SaaS." />
     <meta name="keywords" content="Kartik Joshi, Full Stack Developer, MERN Stack, React, Node.js, Express, MongoDB, Next.js, LangChain, RAG, AI SaaS, Haridwar, COER University" />
     <meta name="author" content="Kartik Joshi" />
-    <meta name="theme-color" content="#07090e" />
+    <meta name="theme-color" content="#151310" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f4ee" media="(prefers-color-scheme: light)" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -30,9 +31,28 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    >
+
+    <!-- Apply saved theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('kj-theme');
+          var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+          var isDark = saved ? saved === 'dark' : !prefersLight;
+          var root = document.documentElement;
+          root.classList.toggle('dark', isDark);
+          root.style.colorScheme = isDark ? 'dark' : 'light';
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
-  <body class="bg-[#07090e] text-slate-100 antialiased selection:bg-cyan-500/20 selection:text-cyan-300 overflow-x-hidden min-h-screen">
+  <body class="antialiased overflow-x-hidden min-h-screen">
     <!-- Netlify Hidden Form Target for Native Processing -->
     <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="text" name="name" />

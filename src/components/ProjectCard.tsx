@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ExternalLink, 
-  Sparkles, 
-  CheckCircle2, 
-  Layers, 
-  ChevronRight, 
-  X,
-  Terminal,
-  Cpu,
-  Globe
-} from 'lucide-react';
+import { ExternalLink, X, ArrowUpRight } from 'lucide-react';
 import { GithubIcon } from './SocialIcons';
 import { Project } from '../types/portfolio';
 
@@ -22,258 +12,184 @@ interface ProjectCardProps {
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Custom visual theme based on project id
-  const getThemeColors = (id: string) => {
-    switch (id) {
-      case 'syntra-ai':
-        return {
-          gradient: 'from-cyan-500/20 via-sky-500/10 to-indigo-500/20',
-          badgeBg: 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300',
-          accentColor: '#38bdf8',
-          icon: <Cpu className="w-5 h-5 text-cyan-400" />
-        };
-      case 'gen-ui':
-        return {
-          gradient: 'from-violet-500/20 via-purple-500/10 to-fuchsia-500/20',
-          badgeBg: 'bg-violet-500/10 border-violet-500/30 text-violet-300',
-          accentColor: '#a855f7',
-          icon: <Sparkles className="w-5 h-5 text-violet-400" />
-        };
-      case 'travel-den':
-      default:
-        return {
-          gradient: 'from-emerald-500/20 via-teal-500/10 to-blue-500/20',
-          badgeBg: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300',
-          accentColor: '#34d399',
-          icon: <Globe className="w-5 h-5 text-emerald-400" />
-        };
-    }
-  };
-
-  const theme = getThemeColors(project.id);
-
   return (
     <>
-      <motion.div
+      <motion.article
         layout
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.4, delay: index * 0.1 }}
-        className="glass-card rounded-2xl border border-white/10 hover:border-cyan-500/40 transition-all duration-300 flex flex-col justify-between overflow-hidden group shadow-lg hover:shadow-cyan-500/10"
+        exit={{ opacity: 0, scale: 0.97 }}
+        transition={{ duration: 0.4, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+        className="group flex flex-col border border-line bg-bg transition-colors duration-300 hover:border-line-strong"
       >
-        {/* Top Header & Visual Banner */}
-        <div className={`p-6 bg-gradient-to-br ${theme.gradient} border-b border-white/5 relative overflow-hidden`}>
-          {/* Subtle Grid Accent */}
-          <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+        {/* Header: number, badge, links — all plain type */}
+        <div className="flex items-center justify-between gap-3 border-b border-line px-6 py-4">
+          <span className="font-mono text-[11px] tabular-nums text-faint">
+            {String(index + 1).padStart(2, '0')}
+          </span>
 
-          <div className="flex items-center justify-between gap-4 mb-4 relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-surface-200/90 border border-white/10 flex items-center justify-center shadow-inner">
-                {theme.icon}
-              </div>
-              <div>
-                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider border ${theme.badgeBg}`}>
-                  {project.badge || 'Full-Stack'}
-                </span>
-              </div>
-            </div>
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
+            {project.badge || 'Full-stack'}
+          </span>
 
-            {/* Quick Links */}
-            <div className="flex items-center gap-2">
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`View ${project.title} on GitHub`}
-                className="w-8 h-8 rounded-lg bg-surface-100/90 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:border-cyan-400/50 hover:bg-cyan-500/10 transition-all"
-              >
-                <GithubIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open ${project.title} live deployment`}
-                className="w-8 h-8 rounded-lg bg-surface-100/90 border border-white/10 flex items-center justify-center text-slate-300 hover:text-cyan-400 hover:border-cyan-400/50 hover:bg-cyan-500/10 transition-all"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-
-          {/* Title & Tagline */}
-          <div className="relative z-10">
-            <h3 className="text-2xl font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
-              {project.title}
-            </h3>
-            <p className="text-xs font-mono text-cyan-400/90 mt-1">
-              {project.tagline}
-            </p>
+          <div className="flex items-center gap-1">
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} on GitHub`}
+              className="grid h-8 w-8 place-items-center rounded-md text-faint transition-colors hover:bg-sunken hover:text-ink"
+            >
+              <GithubIcon className="h-3.5 w-3.5" />
+            </a>
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${project.title}`}
+              className="grid h-8 w-8 place-items-center rounded-md text-faint transition-colors hover:bg-sunken hover:text-ink"
+            >
+              <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.75} />
+            </a>
           </div>
         </div>
 
-        {/* Card Body */}
-        <div className="p-6 flex-1 flex flex-col justify-between">
-          <div>
-            <p className="text-sm text-slate-300 leading-relaxed mb-6 font-normal">
-              {project.description}
-            </p>
+        {/* Body */}
+        <div className="flex flex-1 flex-col px-6 py-6">
+          <h3 className="hang font-display text-2xl font-normal tracking-tight text-ink transition-colors group-hover:text-accent">
+            {project.title}
+          </h3>
+          <p className="mt-1 font-mono text-[11px] leading-relaxed text-faint">
+            {project.tagline}
+          </p>
 
-            {/* Key highlights preview (first 2) */}
-            {project.highlights && project.highlights.length > 0 && (
-              <div className="mb-6 space-y-2">
-                {project.highlights.slice(0, 2).map((h, i) => (
-                  <div key={i} className="flex items-start gap-2 text-xs text-slate-400">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
-                    <span>{h}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">{project.description}</p>
 
-          <div>
-            {/* Tech Stack Badges */}
-            <div className="pt-4 border-t border-white/5 mb-6">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-2.5">
-                Technologies &amp; Architecture
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {project.techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2.5 py-1 rounded-md text-[11px] font-mono bg-surface-100/90 border border-white/10 text-slate-300 group-hover:border-white/15 transition-colors"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
+          {project.highlights && project.highlights.length > 0 && (
+            <ul className="mt-5 space-y-2 border-t border-line pt-4">
+              {project.highlights.slice(0, 2).map((h, i) => (
+                <li key={i} className="flex gap-2.5 text-[13px] leading-relaxed text-muted">
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          )}
 
-            {/* Bottom Actions */}
-            <div className="flex items-center justify-between gap-3 pt-2">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="text-xs font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1 transition-colors"
-              >
-                <span>Architecture breakdown</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </button>
+          {/* Stack as a comma-set mono line */}
+          <p className="mt-5 font-mono text-[11px] leading-relaxed text-faint">
+            {project.techStack.join(', ')}
+          </p>
 
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 hover:border-cyan-400 transition-all"
-              >
-                <span>Live Demo</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
+          {/* Actions */}
+          <div className="mt-6 flex items-center justify-between border-t border-line pt-4">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="group/btn inline-flex items-center gap-1 text-[13px] text-muted transition-colors hover:text-accent"
+            >
+              Case notes
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" strokeWidth={2} />
+            </button>
+
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-accent underline-offset-4 transition-colors hover:underline"
+            >
+              Live
+              <ExternalLink className="h-3 w-3" strokeWidth={2} />
+            </a>
           </div>
         </div>
-      </motion.div>
+      </motion.article>
 
-      {/* Deep-Dive Architecture Modal */}
+      {/* Case notes modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-            {/* Backdrop */}
+          <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 sm:p-8">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsModalOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-md"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             />
 
-            {/* Modal Dialog */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.25 }}
-              className="relative w-full max-w-2xl bg-surface-100 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl z-10 overflow-hidden"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              role="dialog"
+              aria-modal="true"
+              aria-label={project.title}
+              className="relative my-auto w-full max-w-2xl border border-line bg-elev shadow-pop"
             >
-              {/* Top Bar */}
-              <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                    <Terminal className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-white">{project.title}</h4>
-                    <span className="text-xs font-mono text-cyan-400">{project.tagline}</span>
-                  </div>
+              <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-5 sm:px-8">
+                <div>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
+                    {project.tagline}
+                  </span>
+                  <h4 className="hang mt-1.5 font-display text-2xl font-normal tracking-tight text-ink">
+                    {project.title}
+                  </h4>
                 </div>
-
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="w-9 h-9 rounded-xl bg-surface-200 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+                  aria-label="Close"
+                  className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-line text-muted transition-colors hover:text-ink"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
 
-              {/* Description */}
-              <p className="text-sm text-slate-300 leading-relaxed mb-6">
-                {project.description}
-              </p>
+              <div className="px-6 py-6 sm:px-8">
+                <p className="text-sm leading-relaxed text-muted">{project.description}</p>
 
-              {/* Architectural Highlights */}
-              <div className="mb-6">
-                <h5 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
-                  <Layers className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Key Architecture &amp; Engineering Highlights</span>
-                </h5>
-                <div className="space-y-2.5">
-                  {project.highlights?.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 p-3 rounded-xl bg-surface-200/60 border border-white/5 text-xs sm:text-sm text-slate-200">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
+                {project.highlights && project.highlights.length > 0 && (
+                  <div className="mt-6">
+                    <h5 className="kicker">Highlights</h5>
+                    <ul className="mt-3 space-y-2.5">
+                      {project.highlights.map((item, idx) => (
+                        <li
+                          key={idx}
+                          className="flex gap-3 border-l-2 border-accent/40 py-0.5 pl-4 text-sm leading-relaxed text-ink"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="mt-6">
+                  <h5 className="kicker">Stack</h5>
+                  <p className="mt-3 font-mono text-[12px] leading-relaxed text-muted">
+                    {project.techStack.join(' · ')}
+                  </p>
                 </div>
-              </div>
 
-              {/* Complete Tech Stack */}
-              <div className="mb-8">
-                <h5 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
-                  Full Technology Stack
-                </h5>
-                <div className="flex flex-wrap gap-2">
-                  {project.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 rounded-lg text-xs font-mono bg-cyan-500/10 border border-cyan-500/20 text-cyan-300"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                <div className="mt-8 flex flex-wrap items-center justify-end gap-3 border-t border-line pt-5">
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md border border-line-strong px-4 py-2.5 text-[13px] font-medium text-ink transition-colors hover:border-ink hover:bg-sunken"
+                  >
+                    <GithubIcon className="h-3.5 w-3.5" />
+                    Repository
+                  </a>
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2.5 text-[13px] font-medium text-accent-on transition-colors hover:bg-accent-strong"
+                  >
+                    Open live site
+                    <ExternalLink className="h-3.5 w-3.5" strokeWidth={2} />
+                  </a>
                 </div>
-              </div>
-
-              {/* Modal Action Buttons */}
-              <div className="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-white/10">
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-surface-200 hover:bg-surface-50 border border-white/10 text-white flex items-center gap-2 transition-all"
-                >
-                  <GithubIcon className="w-4 h-4" />
-                  <span>GitHub Repository</span>
-                </a>
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white flex items-center gap-2 shadow-md shadow-cyan-500/20 transition-all"
-                >
-                  <span>Launch Live Platform</span>
-                  <ExternalLink className="w-4 h-4" />
-                </a>
               </div>
             </motion.div>
           </div>

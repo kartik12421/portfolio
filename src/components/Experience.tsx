@@ -1,106 +1,71 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Briefcase, 
-  Calendar, 
-  MapPin, 
-  CheckCircle2, 
-  Terminal, 
-  GitBranch, 
-  Sparkles 
-} from 'lucide-react';
 import { SectionHeading } from './SectionHeading';
 import { experience } from '../data/portfolioData';
 
 export const Experience: React.FC = () => {
   return (
-    <section id="experience" className="py-24 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Heading */}
+    <section id="experience" className="bg-sunken px-5 py-20 sm:px-8 lg:py-28">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
-          badge="Work History"
-          title="Professional Experience"
-          subtitle="Real-world software engineering internship delivering production features, REST API endpoints, and full-stack solutions."
-          accent="cyan"
+          index="04"
+          badge="Experience"
+          title="Where I've worked"
+          subtitle="Shipping production features on a commercial full-stack team — REST endpoints, UI work and deployment."
         />
 
-        <div className="max-w-4xl mx-auto">
+        <div className="border-t border-line">
           {experience.map((item, idx) => (
-            <motion.div
+            <motion.article
               key={item.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="relative pl-6 sm:pl-10 border-l-2 border-cyan-500/30 ml-2 sm:ml-4"
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="group grid gap-6 border-b border-line py-9 lg:grid-cols-12 lg:gap-8"
             >
-              {/* Timeline Node Dot */}
-              <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-[#07090e] border-2 border-cyan-400 flex items-center justify-center">
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+              {/* Rail: period + location */}
+              <div className="lg:col-span-3">
+                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+                  {item.period}
+                </div>
+                <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+                  {item.location}
+                </div>
               </div>
 
-              {/* Experience Card */}
-              <div className="glass-card rounded-2xl p-6 sm:p-8 border border-white/10 hover:border-cyan-500/40 transition-all shadow-xl mb-8 group">
-                
-                {/* Header row */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-white/10 mb-6">
-                  <div>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 uppercase tracking-wider mb-2">
-                      {item.type}
-                    </div>
-                    <h3 className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors">
-                      {item.role}
-                    </h3>
-                    <div className="text-base font-semibold text-slate-200 mt-1">
-                      {item.company}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:items-end text-xs font-mono text-slate-400 gap-1.5">
-                    <div className="flex items-center gap-1.5 bg-surface-100 px-3 py-1.5 rounded-lg border border-white/5">
-                      <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>{item.period}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-slate-400">
-                      <MapPin className="w-3.5 h-3.5 text-indigo-400" />
-                      <span>{item.location}</span>
-                    </div>
-                  </div>
+              {/* Main */}
+              <div className="lg:col-span-9">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h3 className="hang font-display text-2xl font-normal tracking-tight text-ink sm:text-[1.75rem]">
+                    {item.role}
+                  </h3>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+                    {item.type}
+                  </span>
                 </div>
+                <div className="mt-1 text-sm font-medium text-muted">{item.company}</div>
 
-                {/* Key Deliverables Bullet Points */}
-                <div className="mb-6 space-y-3">
+                <ul className="mt-5 space-y-3">
                   {item.description.map((bullet, bIdx) => (
-                    <div key={bIdx} className="flex items-start gap-3 text-sm text-slate-300 leading-relaxed">
-                      <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                      <span>{bullet}</span>
-                    </div>
+                    <li key={bIdx} className="flex gap-3 text-sm leading-relaxed text-muted">
+                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                      <span className="max-w-3xl">{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-6 flex flex-wrap gap-x-4 gap-y-1.5">
+                  {item.techStack.map((tech) => (
+                    <span key={tech} className="font-mono text-[11px] text-faint">
+                      {tech}
+                    </span>
                   ))}
                 </div>
-
-                {/* Tech Stack Chips */}
-                <div className="pt-4 border-t border-white/5">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2.5">
-                    Technologies Applied
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {item.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2.5 py-1 rounded-md text-xs font-mono bg-surface-100 border border-white/10 text-slate-300"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
-
       </div>
     </section>
   );

@@ -1,21 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Send, 
-  CheckCircle2, 
-  Copy, 
-  Check, 
-  RotateCw,
-  ExternalLink,
-  MessageSquare,
-  Database,
-  Clock,
-  AlertCircle
-} from 'lucide-react';
-import { GithubIcon, LinkedinIcon } from './SocialIcons';
+import { Send, Check, Copy, RotateCw, Mail, Phone, MapPin } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SectionHeading } from './SectionHeading';
 import { personalInfo } from '../data/portfolioData';
@@ -23,44 +8,25 @@ import { CommentItem } from '../types/portfolio';
 import { sendContactMessage, fetchComments, submitComment } from '../services/api';
 
 export const Contact: React.FC = () => {
-  // Email Form State
-  const [emailForm, setEmailForm] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
+  const [emailForm, setEmailForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [emailSubmitting, setEmailSubmitting] = useState(false);
-  const [emailStatus, setEmailStatus] = useState<{
-    type: 'success' | 'error';
-    text: string;
-  } | null>(null);
+  const [emailStatus, setEmailStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Copy Buttons State
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
 
-  // Comments State
   const [comments, setComments] = useState<CommentItem[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(true);
   const [commentSubmitting, setCommentSubmitting] = useState(false);
   const [commentName, setCommentName] = useState('');
   const [commentText, setCommentText] = useState('');
-  const [commentStatus, setCommentStatus] = useState<{
-    type: 'success' | 'error';
-    text: string;
-  } | null>(null);
+  const [commentStatus, setCommentStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Load real comments from MongoDB Atlas
   const loadComments = async () => {
     setCommentsLoading(true);
     try {
       const res = await fetchComments();
-      if (res && Array.isArray(res.comments)) {
-        setComments(res.comments);
-      } else {
-        setComments([]);
-      }
+      setComments(res && Array.isArray(res.comments) ? res.comments : []);
     } catch (err) {
       console.error('Error fetching comments:', err);
       setComments([]);
@@ -73,7 +39,6 @@ export const Contact: React.FC = () => {
     loadComments();
   }, []);
 
-  // Handle Copy Email / Phone
   const handleCopy = (text: string, type: 'email' | 'phone') => {
     navigator.clipboard.writeText(text);
     if (type === 'email') {
@@ -85,14 +50,10 @@ export const Contact: React.FC = () => {
     }
   };
 
-  // Submit Direct Email
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailForm.name.trim() || !emailForm.email.trim() || !emailForm.message.trim()) {
-      setEmailStatus({
-        type: 'error',
-        text: 'Please fill in your name, email, and message.',
-      });
+      setEmailStatus({ type: 'error', text: 'Please fill in your name, email and message.' });
       return;
     }
 
@@ -108,48 +69,31 @@ export const Contact: React.FC = () => {
       });
 
       if (result.success) {
-        setEmailStatus({
-          type: 'success',
-          text: result.message || 'Thank you! Your email has been delivered to Kartik.',
-        });
-
+        setEmailStatus({ type: 'success', text: result.message || 'Thanks — your message is on its way to Kartik.' });
         confetti({
-          particleCount: 50,
-          spread: 60,
+          particleCount: 40,
+          spread: 55,
           origin: { y: 0.75 },
-          colors: ['#38bdf8', '#818cf8', '#34d399'],
+          colors: ['#0669a9', '#67d2f5', '#1a1816'],
         });
-
-        setEmailForm({
-          name: '',
-          email: '',
-          subject: '',
-          message: '',
-        });
+        setEmailForm({ name: '', email: '', subject: '', message: '' });
       } else {
         setEmailStatus({
           type: 'error',
-          text: 'Unable to send message right now. Please email directly at kartikjoshi842@gmail.com.',
+          text: 'Couldn\u2019t send that right now — please email directly at kartikjoshi842@gmail.com.',
         });
       }
     } catch (err: any) {
-      setEmailStatus({
-        type: 'error',
-        text: err.message || 'An unexpected error occurred.',
-      });
+      setEmailStatus({ type: 'error', text: err.message || 'Something went wrong.' });
     } finally {
       setEmailSubmitting(false);
     }
   };
 
-  // Submit Public Comment
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentName.trim() || !commentText.trim()) {
-      setCommentStatus({
-        type: 'error',
-        text: 'Please provide both your name and a comment.',
-      });
+      setCommentStatus({ type: 'error', text: 'Add both a name and a comment.' });
       return;
     }
 
@@ -157,472 +101,338 @@ export const Contact: React.FC = () => {
     setCommentStatus(null);
 
     try {
-      const res = await submitComment({
-        name: commentName.trim(),
-        message: commentText.trim(),
-      });
+      const res = await submitComment({ name: commentName.trim(), message: commentText.trim() });
 
       if (res.success && res.comment) {
         setComments((prev) => [res.comment!, ...prev]);
         setCommentName('');
         setCommentText('');
-        setCommentStatus({
-          type: 'success',
-          text: 'Your comment has been posted and is now visible to everyone!',
-        });
-
+        setCommentStatus({ type: 'success', text: 'Posted — it\u2019s visible to everyone now.' });
         confetti({
-          particleCount: 45,
-          spread: 60,
+          particleCount: 35,
+          spread: 55,
           origin: { y: 0.75 },
-          colors: ['#38bdf8', '#c084fc', '#34d399'],
+          colors: ['#0669a9', '#67d2f5', '#1a1816'],
         });
       } else {
-        setCommentStatus({
-          type: 'error',
-          text: res.error || 'Failed to post comment. Please try again.',
-        });
+        setCommentStatus({ type: 'error', text: res.error || 'Couldn\u2019t post that. Try again.' });
       }
     } catch (err: any) {
-      setCommentStatus({
-        type: 'error',
-        text: err.message || 'An unexpected error occurred.',
-      });
+      setCommentStatus({ type: 'error', text: err.message || 'Something went wrong.' });
     } finally {
       setCommentSubmitting(false);
     }
   };
 
-  // Format relative timestamp
   const formatTime = (isoString?: string) => {
-    if (!isoString) return 'Just now';
+    if (!isoString) return 'now';
     try {
       const date = new Date(isoString);
-      const diffMs = Date.now() - date.getTime();
-      const diffMinutes = Math.floor(diffMs / 60000);
+      const diffMinutes = Math.floor((Date.now() - date.getTime()) / 60000);
       const diffHours = Math.floor(diffMinutes / 60);
       const diffDays = Math.floor(diffHours / 24);
 
-      if (diffMinutes < 1) return 'Just now';
+      if (diffMinutes < 1) return 'now';
       if (diffMinutes < 60) return `${diffMinutes}m ago`;
       if (diffHours < 24) return `${diffHours}h ago`;
       if (diffDays < 7) return `${diffDays}d ago`;
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     } catch {
-      return 'Just now';
+      return 'now';
     }
   };
 
-  // Deterministic avatar gradient
-  const getAvatarGradient = (seed: string) => {
-    const code = (seed || 'User').charCodeAt(0);
-    const gradients = [
-      'from-cyan-500 to-blue-600',
-      'from-indigo-500 to-purple-600',
-      'from-violet-500 to-pink-600',
-      'from-emerald-500 to-teal-600',
-      'from-amber-500 to-orange-600',
-    ];
-    return gradients[code % gradients.length];
-  };
-
   return (
-    <section id="contact" className="py-24 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Heading */}
+    <section id="contact" className="px-5 py-20 sm:px-8 lg:py-28">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
-          badge="Let's Connect"
-          title="Get In Touch &amp; Comments"
-          subtitle="Send me a direct email for opportunities, or leave a public comment that will be seen by everyone."
-          accent="cyan"
+          index="07"
+          badge="Contact"
+          title="Say hello"
+          subtitle="Hiring, collaboration or just a question — the form goes straight to my inbox. The guestbook below is public."
         />
 
-        {/* Direct Contacts Ribbon */}
+        {/* Contact details as a ruled list */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-14 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-3"
         >
-          {/* Email Pill */}
-          <div className="p-4 rounded-2xl glass-card border border-white/10 flex items-center justify-between group hover:border-cyan-500/40 transition-all">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-                <Mail className="w-4 h-4" />
+          <div className="flex items-start justify-between gap-3 bg-bg p-5">
+            <div className="min-w-0">
+              <div className="kicker flex items-center gap-1.5">
+                <Mail className="h-3 w-3" strokeWidth={2} /> Email
               </div>
-              <div className="overflow-hidden">
-                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Email</span>
-                <a href={`mailto:${personalInfo.email}`} className="text-xs font-semibold text-white hover:text-cyan-300 transition-colors truncate block">
-                  {personalInfo.email}
-                </a>
-              </div>
+              <a
+                href={`mailto:${personalInfo.email}`}
+                className="mt-2 block truncate text-sm text-ink underline-offset-4 transition-colors hover:text-accent hover:underline"
+              >
+                {personalInfo.email}
+              </a>
             </div>
             <button
               onClick={() => handleCopy(personalInfo.email, 'email')}
-              title="Copy Email"
-              className="p-1.5 rounded-lg bg-surface-100 hover:bg-surface-50 text-slate-400 hover:text-white transition-colors shrink-0"
+              aria-label="Copy email address"
+              className="shrink-0 text-faint transition-colors hover:text-ink"
             >
-              {copiedEmail ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+              {copiedEmail ? (
+                <Check className="h-4 w-4 text-accent" strokeWidth={2} />
+              ) : (
+                <Copy className="h-4 w-4" strokeWidth={1.75} />
+              )}
             </button>
           </div>
 
-          {/* Phone Pill */}
-          <div className="p-4 rounded-2xl glass-card border border-white/10 flex items-center justify-between group hover:border-cyan-500/40 transition-all">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-                <Phone className="w-4 h-4" />
+          <div className="flex items-start justify-between gap-3 bg-bg p-5">
+            <div>
+              <div className="kicker flex items-center gap-1.5">
+                <Phone className="h-3 w-3" strokeWidth={2} /> Phone
               </div>
-              <div>
-                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Phone</span>
-                <a href={`tel:${personalInfo.phone}`} className="text-xs font-semibold text-white hover:text-indigo-300 transition-colors">
-                  {personalInfo.phoneFormatted}
-                </a>
-              </div>
+              <a
+                href={`tel:${personalInfo.phone}`}
+                className="mt-2 block text-sm text-ink underline-offset-4 transition-colors hover:text-accent hover:underline"
+              >
+                {personalInfo.phoneFormatted}
+              </a>
             </div>
             <button
               onClick={() => handleCopy(personalInfo.phone, 'phone')}
-              title="Copy Phone"
-              className="p-1.5 rounded-lg bg-surface-100 hover:bg-surface-50 text-slate-400 hover:text-white transition-colors shrink-0"
+              aria-label="Copy phone number"
+              className="shrink-0 text-faint transition-colors hover:text-ink"
             >
-              {copiedPhone ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+              {copiedPhone ? (
+                <Check className="h-4 w-4 text-accent" strokeWidth={2} />
+              ) : (
+                <Copy className="h-4 w-4" strokeWidth={1.75} />
+              )}
             </button>
           </div>
 
-          {/* Location Pill */}
-          <div className="p-4 rounded-2xl glass-card border border-white/10 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
-              <MapPin className="w-4 h-4" />
+          <div className="bg-bg p-5">
+            <div className="kicker flex items-center gap-1.5">
+              <MapPin className="h-3 w-3" strokeWidth={2} /> Location
             </div>
-            <div>
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Location</span>
-              <span className="text-xs font-semibold text-white">
-                {personalInfo.location}
-              </span>
-            </div>
-          </div>
-
-          {/* Social Profiles */}
-          <div className="p-4 rounded-2xl glass-card border border-white/10 flex items-center justify-around gap-2">
-            <a
-              href={personalInfo.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-100 hover:bg-surface-50 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-all"
-            >
-              <GithubIcon className="w-3.5 h-3.5 text-cyan-400" />
-              <span>GitHub</span>
-              <ExternalLink className="w-3 h-3 opacity-60" />
-            </a>
-            <a
-              href={personalInfo.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-100 hover:bg-surface-50 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-all"
-            >
-              <LinkedinIcon className="w-3.5 h-3.5 text-indigo-400" />
-              <span>LinkedIn</span>
-              <ExternalLink className="w-3 h-3 opacity-60" />
-            </a>
+            <div className="mt-2 text-sm text-ink">{personalInfo.location}</div>
           </div>
         </motion.div>
 
-        {/* SIDE-BY-SIDE: Send Email (Left) & Comments (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          
-          {/* ========================================================= */}
-          {/* LEFT COLUMN: SEND EMAIL (Direct & Private)               */}
-          {/* ========================================================= */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl relative overflow-hidden"
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white">Send Me an Email</h3>
-                  <p className="text-xs font-mono text-cyan-400">Private message to kartikjoshi842@gmail.com</p>
-                </div>
-              </div>
-              <span className="hidden sm:inline-block px-2.5 py-1 rounded-full text-[10px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                Direct Inbox
+        {/* Two columns: form + guestbook */}
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
+          {/* Email form */}
+          <div>
+            <div className="flex items-baseline justify-between border-b border-line pb-3">
+              <h3 className="font-display text-2xl font-normal tracking-tight text-ink">
+                Write to me
+              </h3>
+              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+                Direct inbox
               </span>
             </div>
 
-            <form onSubmit={handleEmailSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Name */}
+            <form onSubmit={handleEmailSubmit} className="mt-6 space-y-5">
+              <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-1.5">
-                    Your Name <span className="text-cyan-400">*</span>
+                  <label htmlFor="cf-name" className="kicker block">
+                    Name <span className="text-accent">*</span>
                   </label>
                   <input
+                    id="cf-name"
                     type="text"
                     required
-                    placeholder="Jane Doe"
+                    placeholder="Your name"
                     value={emailForm.name}
                     onChange={(e) => setEmailForm({ ...emailForm, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-surface-100 border border-white/10 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+                    className="field mt-2"
                   />
                 </div>
-
-                {/* Email */}
                 <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-1.5">
-                    Your Email <span className="text-cyan-400">*</span>
+                  <label htmlFor="cf-email" className="kicker block">
+                    Email <span className="text-accent">*</span>
                   </label>
                   <input
+                    id="cf-email"
                     type="email"
                     required
-                    placeholder="jane@example.com"
+                    placeholder="you@example.com"
                     value={emailForm.email}
                     onChange={(e) => setEmailForm({ ...emailForm, email: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-surface-100 border border-white/10 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+                    className="field mt-2"
                   />
                 </div>
               </div>
 
-              {/* Subject */}
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-1.5">
-                  Subject <span className="text-slate-500 text-[10px]">(Optional)</span>
+                <label htmlFor="cf-subject" className="kicker block">
+                  Subject <span className="text-faint">(optional)</span>
                 </label>
                 <input
+                  id="cf-subject"
                   type="text"
-                  placeholder="Internship opportunity / Collaboration / Hiring"
+                  placeholder="Role, project, or question"
                   value={emailForm.subject}
                   onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-surface-100 border border-white/10 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+                  className="field mt-2"
                 />
               </div>
 
-              {/* Message */}
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-1.5">
-                  Your Message <span className="text-cyan-400">*</span>
+                <label htmlFor="cf-message" className="kicker block">
+                  Message <span className="text-accent">*</span>
                 </label>
                 <textarea
+                  id="cf-message"
                   required
-                  rows={5}
-                  placeholder="Hi Kartik, I came across your portfolio and wanted to discuss..."
+                  rows={6}
+                  placeholder="Hi Kartik, I came across your portfolio and…"
                   value={emailForm.message}
                   onChange={(e) => setEmailForm({ ...emailForm, message: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-surface-100 border border-white/10 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all resize-none"
+                  className="field mt-2 resize-none"
                 />
               </div>
 
-              {/* Status Alert */}
               {emailStatus && (
-                <div
-                  className={`p-3.5 rounded-xl text-xs flex items-center gap-2.5 ${
+                <p
+                  className={`border-l-2 py-1.5 pl-3 text-sm leading-relaxed ${
                     emailStatus.type === 'success'
-                      ? 'bg-emerald-950/40 border border-emerald-500/30 text-emerald-300'
-                      : 'bg-red-950/40 border border-red-500/30 text-red-300'
+                      ? 'border-accent text-ink'
+                      : 'border-red-600 text-red-700 dark:border-red-400 dark:text-red-400'
                   }`}
                 >
-                  {emailStatus.type === 'success' ? (
-                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                  ) : (
-                    <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
-                  )}
-                  <span>{emailStatus.text}</span>
-                </div>
+                  {emailStatus.text}
+                </p>
               )}
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={emailSubmitting}
-                className="w-full py-3.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 transition-all active:scale-95 disabled:opacity-50"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-medium text-accent-on transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
               >
                 {emailSubmitting ? (
                   <>
-                    <RotateCw className="w-4 h-4 animate-spin" />
-                    <span>Delivering email...</span>
+                    <RotateCw className="h-4 w-4 animate-spin" />
+                    Sending…
                   </>
                 ) : (
                   <>
-                    <Send className="w-4 h-4" />
-                    <span>Send Email to Kartik</span>
+                    Send message
+                    <Send className="h-4 w-4" strokeWidth={2} />
                   </>
                 )}
               </button>
             </form>
-          </motion.div>
+          </div>
 
-          {/* ========================================================= */}
-          {/* RIGHT COLUMN: PUBLIC COMMENTS (Visible to Everyone)       */}
-          {/* ========================================================= */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl flex flex-col justify-between"
-          >
-            <div>
-              {/* Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-violet-400">
-                    <MessageSquare className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Public Comments</h3>
-                    <p className="text-xs font-mono text-slate-400">Written by visitors &bull; Seen by everyone</p>
-                  </div>
-                </div>
+          {/* Guestbook */}
+          <div>
+            <div className="flex items-baseline justify-between border-b border-line pb-3">
+              <h3 className="font-display text-2xl font-normal tracking-tight text-ink">
+                Guestbook
+              </h3>
+              <button
+                onClick={loadComments}
+                disabled={commentsLoading}
+                aria-label="Refresh comments"
+                className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-faint transition-colors hover:text-ink disabled:opacity-50"
+              >
+                <RotateCw className={`h-3 w-3 ${commentsLoading ? 'animate-spin' : ''}`} />
+                {comments.length} note{comments.length === 1 ? '' : 's'}
+              </button>
+            </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={loadComments}
-                    disabled={commentsLoading}
-                    title="Refresh comments"
-                    className="p-2 rounded-lg bg-surface-100 hover:bg-surface-50 text-slate-400 hover:text-white transition-colors"
-                  >
-                    <RotateCw className={`w-3.5 h-3.5 ${commentsLoading ? 'animate-spin text-cyan-400' : ''}`} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Database Status Strip */}
-              <div className="mb-4 p-2.5 rounded-xl bg-surface-100/60 border border-white/5 flex items-center justify-between text-[11px] font-mono">
-                <div className="flex items-center gap-2 text-emerald-400">
-                  <Database className="w-3.5 h-3.5" />
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>MongoDB Atlas</span>
-                </div>
-                <span className="text-slate-400">
-                  {comments.length} comment{comments.length === 1 ? '' : 's'}
+            <form onSubmit={handleCommentSubmit} className="mt-6 space-y-4">
+              <input
+                type="text"
+                required
+                maxLength={50}
+                placeholder="Your name"
+                aria-label="Your name"
+                value={commentName}
+                onChange={(e) => setCommentName(e.target.value)}
+                className="field"
+              />
+              <div className="relative">
+                <textarea
+                  required
+                  maxLength={500}
+                  rows={3}
+                  placeholder="Leave a note — it's public."
+                  aria-label="Your comment"
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  className="field resize-none pb-7"
+                />
+                <span className="pointer-events-none absolute bottom-2.5 right-3 font-mono text-[10px] tabular-nums text-faint">
+                  {commentText.length}/500
                 </span>
               </div>
 
-              {/* Comment Input Form */}
-              <form onSubmit={handleCommentSubmit} className="space-y-3 mb-6">
-                <div>
-                  <input
-                    type="text"
-                    required
-                    maxLength={50}
-                    placeholder="Your Name or @username *"
-                    value={commentName}
-                    onChange={(e) => setCommentName(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl bg-surface-100 border border-white/10 text-white text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all"
-                  />
-                </div>
-
-                <div className="relative">
-                  <textarea
-                    required
-                    maxLength={500}
-                    rows={3}
-                    placeholder="Write a comment here... (will be seen by everyone who visits this portfolio)"
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-surface-100 border border-white/10 text-white text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all resize-none"
-                  />
-                  <span className="absolute right-3 bottom-3 text-[10px] font-mono text-slate-500">
-                    {commentText.length}/500
-                  </span>
-                </div>
-
-                {/* Status Alert */}
-                {commentStatus && (
-                  <div
-                    className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
-                      commentStatus.type === 'success'
-                        ? 'bg-emerald-950/40 border border-emerald-500/30 text-emerald-300'
-                        : 'bg-red-950/40 border border-red-500/30 text-red-300'
-                    }`}
-                  >
-                    {commentStatus.type === 'success' ? (
-                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
-                    ) : (
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0 text-red-400" />
-                    )}
-                    <span>{commentStatus.text}</span>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={commentSubmitting}
-                  className="w-full py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white flex items-center justify-center gap-2 shadow-md shadow-violet-500/20 transition-all active:scale-95 disabled:opacity-50"
+              {commentStatus && (
+                <p
+                  className={`border-l-2 py-1.5 pl-3 text-sm leading-relaxed ${
+                    commentStatus.type === 'success'
+                      ? 'border-accent text-ink'
+                      : 'border-red-600 text-red-700 dark:border-red-400 dark:text-red-400'
+                  }`}
                 >
-                  {commentSubmitting ? (
-                    <>
-                      <RotateCw className="w-3.5 h-3.5 animate-spin" />
-                      <span>Posting to Atlas...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-3.5 h-3.5" />
-                      <span>Post Comment</span>
-                    </>
-                  )}
-                </button>
-              </form>
+                  {commentStatus.text}
+                </p>
+              )}
 
-              {/* Public Comments Feed List */}
-              <div className="pt-2 border-t border-white/5">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-3">
-                  All Comments
-                </span>
+              <button
+                type="submit"
+                disabled={commentSubmitting}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-line-strong px-5 py-3 text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-sunken disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {commentSubmitting ? (
+                  <>
+                    <RotateCw className="h-4 w-4 animate-spin" />
+                    Posting…
+                  </>
+                ) : (
+                  <>
+                    Post note
+                    <Send className="h-4 w-4" strokeWidth={2} />
+                  </>
+                )}
+              </button>
+            </form>
 
-                <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
-                  {commentsLoading ? (
-                    <div className="py-8 flex flex-col items-center justify-center text-slate-400 text-xs font-mono gap-2">
-                      <RotateCw className="w-5 h-5 animate-spin text-violet-400" />
-                      <span>Loading comments from Atlas...</span>
-                    </div>
-                  ) : comments.length === 0 ? (
-                    <div className="py-8 px-4 text-center rounded-2xl bg-surface-100/40 border border-white/5">
-                      <MessageSquare className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                      <p className="text-xs text-slate-400 font-mono">
-                        No comments yet. Write the first comment above!
+            {/* Notes feed */}
+            <div className="mt-8 border-t border-line pt-5">
+              <span className="kicker">Recent notes</span>
+
+              <div className="mt-4 max-h-[22rem] space-y-px overflow-y-auto border border-line bg-line pr-1">
+                {commentsLoading ? (
+                  <div className="flex flex-col items-center gap-2 bg-bg px-4 py-10 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+                    <RotateCw className="h-4 w-4 animate-spin text-accent" />
+                    Loading notes…
+                  </div>
+                ) : comments.length === 0 ? (
+                  <div className="bg-bg px-4 py-10 text-center">
+                    <p className="font-display text-base text-ink">No notes yet</p>
+                    <p className="mt-1.5 text-sm text-muted">Be the first to sign the guestbook.</p>
+                  </div>
+                ) : (
+                  comments.map((c, i) => (
+                    <div key={c._id || i} className="bg-bg px-4 py-3.5 transition-colors hover:bg-elev">
+                      <div className="flex items-baseline justify-between gap-3">
+                        <span className="truncate text-sm font-medium text-ink">{c.name}</span>
+                        <span className="shrink-0 font-mono text-[10px] tabular-nums text-faint">
+                          {formatTime(c.createdAt)}
+                        </span>
+                      </div>
+                      <p className="mt-1.5 break-words text-sm leading-relaxed text-muted">
+                        {c.message}
                       </p>
                     </div>
-                  ) : (
-                    comments.map((c, i) => (
-                      <div
-                        key={c._id || i}
-                        className="p-3 rounded-xl bg-surface-100/80 border border-white/5 hover:border-white/10 transition-colors"
-                      >
-                        <div className="flex items-center justify-between gap-2 mb-1.5">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-6 h-6 rounded-md bg-gradient-to-tr ${getAvatarGradient(c.name)} flex items-center justify-center text-white text-[10px] font-bold uppercase`}>
-                              {c.name.charAt(0)}
-                            </div>
-                            <span className="font-semibold text-white text-xs sm:text-sm">
-                              {c.name}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-1 text-[10px] font-mono text-slate-500">
-                            <Clock className="w-3 h-3" />
-                            <span>{formatTime(c.createdAt)}</span>
-                          </div>
-                        </div>
-
-                        <p className="text-xs text-slate-300 leading-relaxed pl-8 break-words">
-                          {c.message}
-                        </p>
-                      </div>
-                    ))
-                  )}
-                </div>
+                  ))
+                )}
               </div>
-
             </div>
-          </motion.div>
-
+          </div>
         </div>
-
       </div>
     </section>
   );

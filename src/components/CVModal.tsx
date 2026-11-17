@@ -1,21 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  X, 
-  FileDown, 
-  Printer, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  ExternalLink,
-  GraduationCap,
-  Briefcase,
-  Code2,
-  Award,
-  CheckCircle2
-} from 'lucide-react';
+import { X, FileDown, Printer, Mail, Phone, MapPin } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
-import { personalInfo, experience, projects, skillCategories, certificates } from '../data/portfolioData';
+import { personalInfo, experience, projects, skillCategories } from '../data/portfolioData';
 
 interface CVModalProps {
   isOpen: boolean;
@@ -23,209 +10,201 @@ interface CVModalProps {
 }
 
 export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose }) => {
-  const handlePrint = () => {
-    window.print();
-  };
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto print:p-0">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-3 sm:p-8">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md print:hidden"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm print:hidden"
           />
 
-          {/* Modal Content */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.25 }}
-            className="relative w-full max-w-4xl max-h-[90vh] bg-[#0c101d] text-slate-100 border border-white/20 rounded-3xl shadow-2xl z-10 flex flex-col overflow-hidden print:max-h-none print:border-none print:bg-white print:text-black print:rounded-none"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Curriculum vitae"
+            className="relative my-auto flex w-full max-w-3xl flex-col border border-line bg-elev shadow-pop print:max-h-none print:border-none print:bg-white print:shadow-none"
           >
-            {/* Top Toolbar */}
-            <div className="flex items-center justify-between p-4 sm:px-8 border-b border-white/10 bg-surface-100/90 print:hidden">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-200">
-                  Curriculum Vitae Preview &bull; Kartik Joshi
-                </span>
-              </div>
+            {/* Toolbar */}
+            <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4 print:hidden sm:px-8">
+              <span className="truncate font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
+                Curriculum vitae &mdash; {personalInfo.name}
+              </span>
 
-              <div className="flex items-center gap-2">
+              <div className="flex shrink-0 items-center gap-2">
                 <button
-                  onClick={handlePrint}
-                  className="px-3.5 py-1.5 rounded-xl bg-surface-200 hover:bg-surface-50 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white flex items-center gap-1.5 transition-all"
+                  onClick={() => window.print()}
+                  className="hidden items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:text-ink sm:inline-flex"
                 >
-                  <Printer className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Print / Save PDF</span>
+                  <Printer className="h-3.5 w-3.5" strokeWidth={1.75} />
+                  Print
                 </button>
 
                 <a
                   href="/Kartik_Joshi_CV.pdf"
                   download="Kartik_Joshi_CV.pdf"
-                  className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-xs font-semibold text-cyan-300 flex items-center gap-1.5 transition-all"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-[13px] font-medium text-accent-on transition-colors hover:bg-accent-strong"
                 >
-                  <FileDown className="w-3.5 h-3.5" />
-                  <span>Direct Download</span>
+                  <FileDown className="h-3.5 w-3.5" strokeWidth={2} />
+                  PDF
                 </a>
 
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-xl bg-surface-200 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+                  aria-label="Close"
+                  className="grid h-8 w-8 place-items-center rounded-md border border-line text-muted transition-colors hover:text-ink"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             </div>
 
-            {/* Resume Sheet Body */}
-            <div className="p-6 sm:p-10 overflow-y-auto space-y-8 font-sans print:p-0 print:space-y-6">
-              
-              {/* Resume Header */}
-              <div className="border-b border-white/10 pb-6 print:border-black/20">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            {/* Resume sheet */}
+            <div className="space-y-8 overflow-y-auto px-5 py-8 sm:px-10 sm:py-10 print:space-y-6 print:p-0">
+              {/* Header */}
+              <header className="border-b border-line pb-6 print:border-black/30">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                   <div>
-                    <h1 className="text-3xl font-extrabold text-white tracking-tight print:text-black">
+                    <h1 className="hang font-display text-4xl font-normal tracking-tight text-ink print:text-black">
                       {personalInfo.name}
                     </h1>
-                    <p className="text-sm font-semibold text-cyan-400 print:text-blue-700 mt-1">
+                    <p className="mt-1.5 text-sm text-accent print:text-sky-700">
                       {personalInfo.role}
                     </p>
                   </div>
 
-                  <div className="text-xs font-mono text-slate-300 print:text-gray-700 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-3.5 h-3.5 text-cyan-400 print:text-black" />
-                      <span>{personalInfo.email}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-indigo-400 print:text-black" />
-                      <span>{personalInfo.phoneFormatted}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-violet-400 print:text-black" />
-                      <span>{personalInfo.location}</span>
-                    </div>
-                  </div>
+                  <address className="space-y-1 font-mono text-[11px] not-italic text-muted print:text-gray-700">
+                    <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2 transition-colors hover:text-accent">
+                      <Mail className="h-3 w-3" strokeWidth={1.75} /> {personalInfo.email}
+                    </a>
+                    <span className="flex items-center gap-2">
+                      <Phone className="h-3 w-3" strokeWidth={1.75} /> {personalInfo.phoneFormatted}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <MapPin className="h-3 w-3" strokeWidth={1.75} /> {personalInfo.location}
+                    </span>
+                  </address>
                 </div>
 
-                <div className="flex items-center gap-4 mt-4 pt-4 border-t border-white/5 print:border-black/10 text-xs font-mono text-slate-400 print:text-gray-600">
-                  <a href={personalInfo.github} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1">
-                    <GithubIcon className="w-3 h-3" /> github.com/kartik12421
+                <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-line pt-4 font-mono text-[11px] text-faint print:border-black/20 print:text-gray-600">
+                  <a href={personalInfo.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-accent">
+                    <GithubIcon className="h-3 w-3" /> github.com/kartik12421
                   </a>
-                  <span>&bull;</span>
-                  <a href={personalInfo.linkedin} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1">
-                    <LinkedinIcon className="w-3 h-3" /> linkedin.com/in/kartik-joshi-31a509330
+                  <a href={personalInfo.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 hover:text-accent">
+                    <LinkedinIcon className="h-3 w-3" /> linkedin.com/in/kartik-joshi-31a509330
                   </a>
                 </div>
-              </div>
+              </header>
 
               {/* Education */}
-              <div>
-                <h2 className="text-xs font-mono uppercase tracking-widest text-cyan-400 print:text-blue-700 font-bold mb-3 flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4" />
-                  <span>Education</span>
+              <section>
+                <h2 className="kicker border-b border-line pb-2 print:border-black/30 print:text-sky-700">
+                  Education
                 </h2>
-                <div className="p-4 rounded-xl bg-surface-100/60 border border-white/5 print:bg-gray-50 print:border-gray-200">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
-                    <h3 className="font-bold text-white print:text-black text-sm">
+                <div className="mt-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                  <div>
+                    <h3 className="text-sm font-semibold text-ink print:text-black">
                       Bachelor of Computer Applications (BCA)
                     </h3>
-                    <span className="text-xs font-mono text-cyan-300 print:text-blue-600 font-bold">
-                      Full-Time
-                    </span>
+                    <p className="mt-0.5 text-[13px] text-muted print:text-gray-700">
+                      COER University, Roorkee &middot; Uttarakhand, India
+                    </p>
                   </div>
-                  <div className="text-xs text-slate-300 print:text-gray-700">
-                    COER University, Roorkee &bull; Uttarakhand, India
-                  </div>
+                  <span className="font-mono text-[11px] text-faint print:text-gray-600">Full-time</span>
                 </div>
-              </div>
+              </section>
 
-              {/* Professional Experience */}
-              <div>
-                <h2 className="text-xs font-mono uppercase tracking-widest text-cyan-400 print:text-blue-700 font-bold mb-3 flex items-center gap-2">
-                  <Briefcase className="w-4 h-4" />
-                  <span>Work Experience</span>
+              {/* Experience */}
+              <section>
+                <h2 className="kicker border-b border-line pb-2 print:border-black/30 print:text-sky-700">
+                  Experience
                 </h2>
-                {experience.map((exp) => (
-                  <div key={exp.id} className="p-4 rounded-xl bg-surface-100/60 border border-white/5 print:bg-gray-50 print:border-gray-200 mb-3">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                      <div>
-                        <h3 className="font-bold text-white print:text-black text-sm">{exp.role}</h3>
-                        <div className="text-xs text-cyan-400 print:text-blue-600 font-semibold">{exp.company} &bull; {exp.location}</div>
+                <div className="mt-4 space-y-5">
+                  {experience.map((exp) => (
+                    <div key={exp.id}>
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                        <div>
+                          <h3 className="text-sm font-semibold text-ink print:text-black">{exp.role}</h3>
+                          <p className="mt-0.5 text-[13px] text-muted print:text-gray-700">
+                            {exp.company} &middot; {exp.location}
+                          </p>
+                        </div>
+                        <span className="shrink-0 font-mono text-[11px] text-faint print:text-gray-600">
+                          {exp.period}
+                        </span>
                       </div>
-                      <span className="text-xs font-mono text-slate-400 print:text-gray-600">{exp.period}</span>
+                      <ul className="mt-2 space-y-1.5">
+                        {exp.description.map((bullet, i) => (
+                          <li key={i} className="flex gap-2.5 text-[13px] leading-relaxed text-muted print:text-gray-800">
+                            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent print:bg-black" />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <ul className="space-y-1.5 mt-2">
-                      {exp.description.map((bullet, i) => (
-                        <li key={i} className="text-xs text-slate-300 print:text-gray-800 flex items-start gap-2">
-                          <span className="text-cyan-400 print:text-black">&bull;</span>
-                          <span>{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </section>
 
-              {/* Major Projects */}
-              <div>
-                <h2 className="text-xs font-mono uppercase tracking-widest text-cyan-400 print:text-blue-700 font-bold mb-3 flex items-center gap-2">
-                  <Code2 className="w-4 h-4" />
-                  <span>Featured Production Projects</span>
+              {/* Projects */}
+              <section>
+                <h2 className="kicker border-b border-line pb-2 print:border-black/30 print:text-sky-700">
+                  Selected projects
                 </h2>
-                <div className="space-y-3">
+                <div className="mt-4 space-y-4">
                   {projects.map((proj) => (
-                    <div key={proj.id} className="p-4 rounded-xl bg-surface-100/60 border border-white/5 print:bg-gray-50 print:border-gray-200">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-bold text-white print:text-black text-sm">{proj.title}</h3>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 print:text-blue-700 border border-cyan-500/20">
-                            {proj.tagline}
-                          </span>
-                        </div>
-                        <div className="text-xs font-mono text-slate-400 print:text-gray-600">
+                    <div key={proj.id}>
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                        <h3 className="text-sm font-semibold text-ink print:text-black">{proj.title}</h3>
+                        <span className="shrink-0 font-mono text-[11px] text-faint print:text-gray-600">
                           {proj.liveUrl.replace('https://', '')}
-                        </div>
+                        </span>
                       </div>
-                      <p className="text-xs text-slate-300 print:text-gray-800 mb-2">
+                      <p className="mt-1 text-[13px] leading-relaxed text-muted print:text-gray-800">
                         {proj.description}
                       </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {proj.techStack.map((t) => (
-                          <span key={t} className="px-2 py-0.5 rounded text-[10px] font-mono bg-surface-200 print:bg-gray-200 text-slate-300 print:text-black">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
+                      <p className="mt-1.5 font-mono text-[11px] text-faint print:text-gray-600">
+                        {proj.techStack.join(', ')}
+                      </p>
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
 
-              {/* Technical Skills Overview */}
-              <div>
-                <h2 className="text-xs font-mono uppercase tracking-widest text-cyan-400 print:text-blue-700 font-bold mb-3">
-                  Technical Skills &amp; Tools
+              {/* Skills */}
+              <section>
+                <h2 className="kicker border-b border-line pb-2 print:border-black/30 print:text-sky-700">
+                  Technical skills
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   {skillCategories.map((cat) => (
-                    <div key={cat.title} className="p-3 rounded-lg bg-surface-100/40 border border-white/5 print:bg-gray-50 print:border-gray-200">
-                      <span className="font-bold text-white print:text-black block mb-1">{cat.title}:</span>
-                      <span className="text-slate-300 print:text-gray-800 font-mono text-[11px]">
+                    <div key={cat.title}>
+                      <h3 className="text-[13px] font-semibold text-ink print:text-black">{cat.title}</h3>
+                      <p className="mt-1 font-mono text-[11px] leading-relaxed text-muted print:text-gray-700">
                         {cat.skills.map((s) => s.name).join(', ')}
-                      </span>
+                      </p>
                     </div>
                   ))}
                 </div>
-              </div>
-
+              </section>
             </div>
           </motion.div>
         </div>

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Terminal } from 'lucide-react';
 import { SectionHeading } from './SectionHeading';
 import { ProjectCard } from './ProjectCard';
 import { projects } from '../data/portfolioData';
@@ -10,10 +9,10 @@ export const Projects: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ProjectCategory>('all');
 
   const tabs: { id: ProjectCategory; label: string }[] = [
-    { id: 'all', label: 'All Projects' },
-    { id: 'ai-saas', label: 'AI SaaS & Agents' },
-    { id: 'full-stack', label: 'Full-Stack Systems' },
-    { id: 'web-apps', label: 'Web Applications' },
+    { id: 'all', label: 'All' },
+    { id: 'ai-saas', label: 'AI & SaaS' },
+    { id: 'full-stack', label: 'Full-stack' },
+    { id: 'web-apps', label: 'Web apps' },
   ];
 
   const filteredProjects = projects.filter((project) => {
@@ -22,46 +21,45 @@ export const Projects: React.FC = () => {
   });
 
   return (
-    <section id="projects" className="py-24 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Heading */}
+    <section id="projects" className="bg-sunken px-5 py-20 sm:px-8 lg:py-28">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
-          badge="Featured Engineering"
-          title="Production-Ready Projects"
-          subtitle="Explore scalable full-stack applications, AI microservices, and interactive developer platforms built with modern architectures."
-          accent="cyan"
+          index="02"
+          badge="Selected work"
+          title="Things I've shipped"
+          subtitle="Full-stack systems, AI microservices and developer platforms — each one built end to end and deployed."
         />
 
-        {/* Filter Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex p-1.5 rounded-2xl bg-surface-100/80 border border-white/10 backdrop-blur-md">
-            {tabs.map((tab) => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`relative px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
-                    isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  <span className="relative z-10">{tab.label}</span>
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeProjectTab"
-                      className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 border border-cyan-500/40 rounded-xl shadow-sm"
-                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
+        {/* Filter as plain text tabs with an underline, matching the navbar */}
+        <div className="mb-10 flex flex-wrap items-center gap-x-1 gap-y-2">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative px-3 py-2 text-sm transition-colors ${
+                  isActive ? 'text-ink' : 'text-muted hover:text-ink'
+                }`}
+              >
+                {tab.label}
+                {isActive && (
+                  <motion.span
+                    layoutId="project-underline"
+                    className="absolute inset-x-3 bottom-1 h-px bg-accent"
+                    transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+                  />
+                )}
+              </button>
+            );
+          })}
+
+          <span className="ml-auto font-mono text-[11px] tabular-nums text-faint">
+            {filteredProjects.length} / {projects.length}
+          </span>
         </div>
 
-        {/* Projects Grid */}
-        <motion.div layout className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
@@ -69,21 +67,19 @@ export const Projects: React.FC = () => {
           </AnimatePresence>
         </motion.div>
 
-        {/* Bottom GitHub Prompt */}
-        <div className="mt-16 text-center">
-          <p className="text-xs sm:text-sm text-slate-400 font-mono">
-            Looking for more code? Check out all repositories on{' '}
+        <div className="mt-14 border-t border-line pt-5">
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+            More on{' '}
             <a
               href="https://github.com/kartik12421"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-cyan-400 hover:underline inline-flex items-center gap-1 font-semibold"
+              className="text-accent underline-offset-4 transition-colors hover:underline"
             >
-              github.com/kartik12421 &rarr;
+              github.com/kartik12421
             </a>
           </p>
         </div>
-
       </div>
     </section>
   );

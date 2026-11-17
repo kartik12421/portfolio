@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Award, 
-  ExternalLink, 
-  Eye, 
-  X, 
-  CheckCircle2, 
-  Sparkles,
-  ShieldCheck
-} from 'lucide-react';
+import { X } from 'lucide-react';
 import { SectionHeading } from './SectionHeading';
 import { certificates } from '../data/portfolioData';
 import { CertificateItem } from '../types/portfolio';
@@ -17,141 +9,111 @@ export const Certificates: React.FC = () => {
   const [selectedCert, setSelectedCert] = useState<CertificateItem | null>(null);
 
   return (
-    <section id="certificates" className="py-24 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Heading */}
+    <section id="certificates" className="px-5 py-20 sm:px-8 lg:py-28">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
-          badge="Verified Credentials"
-          title="Certifications &amp; Accreditations"
-          subtitle="Industry certifications from Microsoft, HP, technical hackathons, and foundational computer science curricula."
-          accent="violet"
+          index="05"
+          badge="Certificates"
+          title="Certifications"
+          subtitle="Coursework and credentials from Microsoft, HP, Udemy and university competitions."
         />
 
-        {/* Certificates Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {certificates.map((cert, index) => (
-            <motion.div
+            <motion.button
               key={cert.id}
-              initial={{ opacity: 0, y: 25 }}
+              type="button"
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="glass-card rounded-2xl border border-white/10 overflow-hidden flex flex-col justify-between group hover:border-cyan-500/40 transition-all duration-300 shadow-lg hover:shadow-cyan-500/10 cursor-pointer"
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => setSelectedCert(cert)}
+              className="group flex flex-col border border-line bg-bg text-left transition-colors duration-300 hover:border-line-strong"
             >
-              {/* Image Preview Window */}
-              <div className="relative aspect-[4/3] bg-slate-900 overflow-hidden">
+              <div className="relative overflow-hidden border-b border-line bg-sunken">
                 <img
                   src={cert.image}
                   alt={cert.title}
-                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105 filter brightness-95 group-hover:brightness-100"
+                  className="aspect-[4/3] w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                   loading="lazy"
                 />
-                
-                {/* Overlay hover prompt */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2 text-xs font-semibold text-white">
-                  <Eye className="w-4 h-4 text-cyan-400" />
-                  <span>View Certificate</span>
-                </div>
-
-                {/* Badge */}
-                <div className="absolute top-3 left-3">
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-black/60 border border-white/20 text-cyan-300 backdrop-blur-md">
-                    {cert.badge}
-                  </span>
-                </div>
+                <span className="absolute left-3 top-3 bg-bg/90 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent backdrop-blur-sm">
+                  {cert.badge}
+                </span>
               </div>
 
-              {/* Certificate Details */}
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
-                    <span>{cert.issuer}</span>
-                    <span>{cert.date}</span>
-                  </div>
-                  <h3 className="font-bold text-white text-base group-hover:text-cyan-300 transition-colors line-clamp-2">
-                    {cert.title}
-                  </h3>
+              <div className="flex flex-1 flex-col p-5">
+                <div className="flex items-baseline justify-between gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+                  <span className="truncate">{cert.issuer}</span>
+                  <span className="shrink-0 tabular-nums">{cert.date}</span>
                 </div>
-
-                <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-cyan-400 font-medium">
-                  <span className="flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Verified</span>
-                  </span>
-                  <span className="text-slate-400 group-hover:text-white flex items-center gap-1 transition-colors">
-                    <span>Inspect</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </span>
-                </div>
+                <h3 className="mt-2 flex-1 font-display text-base font-medium leading-snug tracking-tight text-ink transition-colors group-hover:text-accent">
+                  {cert.title}
+                </h3>
+                <span className="mt-4 border-t border-line pt-3 text-[11px] uppercase tracking-[0.14em] text-faint transition-colors group-hover:text-accent">
+                  View &rarr;
+                </span>
               </div>
-            </motion.div>
+            </motion.button>
           ))}
         </div>
-
       </div>
 
-      {/* Lightbox / Zoom Modal */}
+      {/* Lightbox */}
       <AnimatePresence>
         {selectedCert && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-            {/* Backdrop */}
+          <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 sm:p-8">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedCert(null)}
-              className="fixed inset-0 bg-black/85 backdrop-blur-md"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm"
             />
 
-            {/* Modal Card */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative max-w-3xl w-full bg-surface-100 border border-white/20 rounded-3xl p-5 sm:p-6 shadow-2xl z-10"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              role="dialog"
+              aria-modal="true"
+              aria-label={selectedCert.title}
+              className="relative my-auto w-full max-w-3xl border border-line bg-elev shadow-pop"
             >
-              {/* Modal Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                    <Award className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-white">{selectedCert.title}</h4>
-                    <span className="text-xs font-mono text-cyan-400">{selectedCert.issuer} &bull; {selectedCert.date}</span>
-                  </div>
+              <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-5 sm:px-8">
+                <div className="min-w-0">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
+                    {selectedCert.issuer} &mdash; {selectedCert.date}
+                  </span>
+                  <h4 className="hang mt-1.5 font-display text-xl font-normal tracking-tight text-ink sm:text-2xl">
+                    {selectedCert.title}
+                  </h4>
                 </div>
-
                 <button
                   onClick={() => setSelectedCert(null)}
-                  className="w-9 h-9 rounded-xl bg-surface-200 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+                  aria-label="Close"
+                  className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-line text-muted transition-colors hover:text-ink"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
 
-              {/* Full-view Image */}
-              <div className="rounded-2xl overflow-hidden bg-black/40 border border-white/10 max-h-[70vh] flex items-center justify-center">
+              <div className="p-4 sm:p-6">
                 <img
                   src={selectedCert.image}
                   alt={selectedCert.title}
-                  className="w-full max-h-[68vh] object-contain rounded-xl"
+                  className="mx-auto max-h-[65vh] w-auto max-w-full object-contain"
                 />
               </div>
 
-              {/* Footer Note */}
-              <div className="mt-4 flex items-center justify-between text-xs text-slate-400 font-mono">
-                <span className="flex items-center gap-1.5 text-emerald-400">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Credential verified in portfolio records</span>
-                </span>
+              <div className="flex items-center justify-between gap-4 border-t border-line px-6 py-4 font-mono text-[11px] uppercase tracking-[0.14em] text-faint sm:px-8">
+                <span>Credential on file</span>
                 <button
                   onClick={() => setSelectedCert(null)}
-                  className="text-cyan-400 hover:underline"
+                  className="text-accent underline-offset-4 hover:underline"
                 >
-                  Close view
+                  Close
                 </button>
               </div>
             </motion.div>

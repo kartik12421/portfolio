@@ -2,52 +2,56 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 interface SectionHeadingProps {
+  /** Section number shown in the left rail, e.g. "01" */
+  index?: string;
+  /** Small caps kicker above the title */
   badge?: string;
-  title: string;
+  title: React.ReactNode;
   subtitle?: string;
-  align?: 'left' | 'center';
-  accent?: 'cyan' | 'violet';
 }
 
+/**
+ * Editorial section header: a hairline rule, a numbered rail on the left,
+ * and the serif headline on the right. Every section uses this so the page
+ * reads like a single printed document rather than a stack of widgets.
+ */
 export const SectionHeading: React.FC<SectionHeadingProps> = ({
+  index,
   badge,
   title,
   subtitle,
-  align = 'center',
-  accent = 'cyan',
 }) => {
-  const isCenter = align === 'center';
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
+    <motion.header
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`mb-12 md:mb-16 ${isCenter ? 'text-center mx-auto max-w-2xl' : 'text-left max-w-2xl'}`}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="rule mb-12 pt-5 md:mb-16"
     >
-      {badge && (
-        <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-medium tracking-wide uppercase mb-3 ${
-          accent === 'cyan'
-            ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-            : 'bg-violet-500/10 text-violet-400 border border-violet-500/20'
-        }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${accent === 'cyan' ? 'bg-cyan-400' : 'bg-violet-400'} animate-pulse`} />
-          {badge}
+      <div className="grid gap-5 md:grid-cols-12 md:gap-8">
+        <div className="md:col-span-3 lg:col-span-2">
+          <div className="flex items-baseline gap-3 md:block">
+            {index && (
+              <span className="font-mono text-xs tabular-nums text-accent">{index}</span>
+            )}
+            {badge && (
+              <span className="kicker md:mt-2 md:block">{badge}</span>
+            )}
+          </div>
         </div>
-      )}
 
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-4">
-        {title}
-      </h2>
-
-      {subtitle && (
-        <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
-          {subtitle}
-        </p>
-      )}
-
-      <div className={`mt-4 h-0.5 w-16 bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-full ${isCenter ? 'mx-auto' : ''}`} />
-    </motion.div>
+        <div className="md:col-span-9 lg:col-span-10">
+          <h2 className="hang text-balance font-display text-display-sm font-normal tracking-tight text-ink md:text-display">
+            {title}
+          </h2>
+          {subtitle && (
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted md:mt-5 md:text-lg">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </div>
+    </motion.header>
   );
 };

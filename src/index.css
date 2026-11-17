@@ -2,79 +2,141 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------------------------------------------
+   Theme tokens
+   Warm paper in light mode, warm near-black in dark mode.
+   Cyan accent retained from the original brand, retuned per theme so
+   it passes contrast on each background.
+------------------------------------------------------------------ */
 @layer base {
   :root {
+    color-scheme: light;
+
+    --c-bg: 247 244 238;          /* #f7f4ee — warm paper */
+    --c-bg-elev: 253 252 249;     /* #fdfcf9 — card surface */
+    --c-bg-sunken: 239 235 226;   /* #efebe2 — inset wells */
+    --c-border: 226 220 208;      /* #e2dcd0 — hairline */
+    --c-border-strong: 201 193 178;
+    --c-text: 26 24 22;           /* #1a1816 — warm near-black */
+    --c-text-muted: 87 81 73;     /* #575149 — 7.1:1 on paper */
+    --c-text-faint: 111 105 97;   /* #6f6961 — 4.9:1 on paper, still AA at 11px */
+    --c-accent: 8 105 169;        /* #0669a9 — cyan dark enough for AA on paper */
+    --c-accent-strong: 3 78 125;
+    --c-accent-on: 255 255 255;
+  }
+
+  .dark {
     color-scheme: dark;
+
+    --c-bg: 21 19 16;             /* #151310 — warm near-black */
+    --c-bg-elev: 29 26 23;        /* #1d1a17 */
+    --c-bg-sunken: 15 14 12;      /* #0f0e0c */
+    --c-border: 47 43 38;         /* #2f2b26 */
+    --c-border-strong: 66 61 54;
+    --c-text: 238 234 226;        /* #eeeae2 — warm off-white */
+    --c-text-muted: 176 169 159;  /* #b0a99f — 8.0:1 on bg */
+    --c-text-faint: 143 136 128;  /* #8f8880 — 5.3:1 on bg */
+    --c-accent: 103 210 245;      /* #67d2f5 — brightened for dark bg */
+    --c-accent-strong: 125 232 255;
+    --c-accent-on: 10 24 31;      /* dark ink on bright cyan button */
   }
 
   html {
     scroll-behavior: smooth;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
-  /* Custom dark scrollbar */
+  body {
+    background-color: rgb(var(--c-bg));
+    color: rgb(var(--c-text));
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  ::selection {
+    background: rgb(var(--c-accent) / 0.22);
+    color: rgb(var(--c-text));
+  }
+
+  /* Themed scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 11px;
   }
   ::-webkit-scrollbar-track {
-    background: #07090e;
+    background: rgb(var(--c-bg-sunken));
   }
   ::-webkit-scrollbar-thumb {
-    background: #1e293b;
+    background: rgb(var(--c-border-strong));
+    border: 3px solid rgb(var(--c-bg-sunken));
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #334155;
+    background: rgb(var(--c-text-faint));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-accent));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  input,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  /* A single reusable surface. Cards, panels and inputs all sit on this
+     so the whole page reads as one material instead of ten. */
+  .surface {
+    background-color: rgb(var(--c-bg-elev));
+    border: 1px solid rgb(var(--c-border));
+  }
+
+  .well {
+    background-color: rgb(var(--c-bg-sunken));
+    border: 1px solid rgb(var(--c-border));
+  }
+
+  /* Small caps label — the recurring editorial "kicker" above content */
+  .kicker {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-faint;
+  }
+
+  .rule {
+    border-top: 1px solid rgb(var(--c-border));
+  }
+
+  .field {
+    @apply w-full rounded-md border border-line bg-elev px-3.5 py-2.5 text-sm text-ink placeholder:text-faint;
+    transition: border-color 0.18s ease, background-color 0.18s ease;
+  }
+  .field:focus {
+    outline: none;
+    border-color: rgb(var(--c-accent));
+    box-shadow: 0 0 0 3px rgb(var(--c-accent) / 0.14);
   }
 }
 
 @layer utilities {
-  .text-gradient-cyan {
-    background: linear-gradient(135deg, #ffffff 20%, #38bdf8 70%, #0284c7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  /* Display headings pull optical alignment — serif caps overshoot
+     slightly, so hang them back a hair. */
+  .hang {
+    margin-left: -0.03em;
   }
 
-  .text-gradient-violet {
-    background: linear-gradient(135deg, #ffffff 20%, #a855f7 70%, #6366f1 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .text-balance {
+    text-wrap: balance;
   }
 
-  .text-gradient-gold {
-    background: linear-gradient(135deg, #fef08a 20%, #f59e0b 80%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
-
-  .glass-card {
-    background: rgba(15, 20, 34, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .glass-card-hover {
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .glass-card-hover:hover {
-    background: rgba(20, 27, 45, 0.8);
-    border-color: rgba(56, 189, 248, 0.3);
-    box-shadow: 0 12px 35px -10px rgba(56, 189, 248, 0.15);
-    transform: translateY(-2px);
-  }
-
-  .glass-nav {
-    background: rgba(7, 9, 14, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  }
-
-  .glow-mesh {
-    background-image: 
-      radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 85% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 50% 60%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

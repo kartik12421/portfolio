@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  Code2, 
-  Terminal, 
-  Database, 
-  Cpu, 
-  Layers, 
-  Server, 
-  Globe, 
-  ShieldCheck, 
-  Key, 
-  Workflow, 
-  Cloud, 
+import {
+  Code2,
+  Terminal,
+  Database,
+  Cpu,
+  Layers,
+  Server,
+  Globe,
+  ShieldCheck,
+  Workflow,
+  Cloud,
   Wrench,
-  CheckCircle2,
-  FileCode2
 } from 'lucide-react';
 
 interface TechSkillIconProps {
@@ -23,72 +20,74 @@ interface TechSkillIconProps {
   className?: string;
 }
 
+/**
+ * Renders the official logo when we have one, otherwise a neutral glyph.
+ * Deliberately avoids hardcoding a dark tile — the container adapts to
+ * whichever theme is active.
+ */
 export const TechSkillIcon: React.FC<TechSkillIconProps> = ({
   name,
   imageUrl,
-  color = '#38bdf8',
-  className = 'w-9 h-9',
+  color,
+  className = 'h-9 w-9',
 }) => {
   const [imageError, setImageError] = useState(false);
 
-  // Return fallback vector if image failed or not provided
   const renderFallbackIcon = () => {
     const lower = name.toLowerCase();
-    const iconClass = "w-5 h-5";
+    const cls = 'h-5 w-5';
+    const style = color ? { color } : undefined;
 
     if (lower.includes('java') || lower.includes('script') || lower.includes('typescript') || lower.includes('php')) {
-      return <Code2 className={iconClass} style={{ color }} />;
+      return <Code2 className={cls} style={style} strokeWidth={1.5} />;
     }
     if (lower.includes('react') || lower.includes('tailwind') || lower.includes('redux') || lower.includes('html') || lower.includes('css') || lower.includes('bootstrap') || lower.includes('vite')) {
-      return <Layers className={iconClass} style={{ color }} />;
+      return <Layers className={cls} style={style} strokeWidth={1.5} />;
     }
     if (lower.includes('node') || lower.includes('express') || lower.includes('api') || lower.includes('server')) {
-      return <Server className={iconClass} style={{ color }} />;
+      return <Server className={cls} style={style} strokeWidth={1.5} />;
     }
     if (lower.includes('mongo') || lower.includes('sql') || lower.includes('redis') || lower.includes('database') || lower.includes('postgres')) {
-      return <Database className={iconClass} style={{ color }} />;
+      return <Database className={cls} style={style} strokeWidth={1.5} />;
     }
     if (lower.includes('lang') || lower.includes('rag') || lower.includes('ai')) {
-      return <Cpu className={iconClass} style={{ color }} />;
+      return <Cpu className={cls} style={style} strokeWidth={1.5} />;
     }
     if (lower.includes('docker') || lower.includes('cloud') || lower.includes('aws') || lower.includes('nginx') || lower.includes('render') || lower.includes('ci')) {
-      return <Cloud className={iconClass} style={{ color }} />;
+      return <Cloud className={cls} style={style} strokeWidth={1.5} />;
     }
     if (lower.includes('jwt') || lower.includes('auth') || lower.includes('session')) {
-      return <ShieldCheck className={iconClass} style={{ color }} />;
+      return <ShieldCheck className={cls} style={style} strokeWidth={1.5} />;
     }
     if (lower.includes('git') || lower.includes('postman') || lower.includes('tool') || lower.includes('testing')) {
-      return <Wrench className={iconClass} style={{ color }} />;
+      return <Wrench className={cls} style={style} strokeWidth={1.5} />;
     }
-    return <Terminal className={iconClass} style={{ color }} />;
+    if (lower.includes('web') || lower.includes('frontend') || lower.includes('ui')) {
+      return <Globe className={cls} style={style} strokeWidth={1.5} />;
+    }
+    if (lower.includes('workflow') || lower.includes('pipeline') || lower.includes('orchestration')) {
+      return <Workflow className={cls} style={style} strokeWidth={1.5} />;
+    }
+    return <Terminal className={cls} style={style} strokeWidth={1.5} />;
   };
 
-  return (
-    <div
-      className={`relative rounded-xl p-2 flex items-center justify-center transition-all bg-[#0a0e19] border border-white/10 group-hover:border-white/20 shadow-sm ${className}`}
-      style={{
-        boxShadow: `0 4px 15px -4px ${color}20`,
-      }}
-    >
-      {/* Subtle brand glow behind icon */}
-      <div 
-        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity blur-sm pointer-events-none"
-        style={{ backgroundColor: color }}
-      />
-
-      {imageUrl && !imageError ? (
+  if (imageUrl && !imageError) {
+    return (
+      <div className={`grid shrink-0 place-items-center ${className}`}>
         <img
           src={imageUrl}
-          alt={`${name} icon`}
+          alt={`${name} logo`}
           loading="lazy"
           onError={() => setImageError(true)}
-          className="w-full h-full object-contain filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300"
+          className="h-full w-full object-contain"
         />
-      ) : (
-        <div className="flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-          {renderFallbackIcon()}
-        </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className={`grid shrink-0 place-items-center text-muted ${className}`}>
+      {renderFallbackIcon()}
     </div>
   );
 };
