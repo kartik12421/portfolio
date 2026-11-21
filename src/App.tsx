@@ -11,32 +11,41 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { CVModal } from './components/CVModal';
 import { ThemeProvider } from './theme';
+import { usePreloader } from './hooks/usePreloader';
 
 export const App: React.FC = () => {
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
 
+  // The boot loader (in index.html) covers the bundle download; once the
+  // portfolio is ready we reveal it, so sections animate in behind the fade.
+  const isReady = usePreloader();
+
   return (
     <ThemeProvider>
       <div className="relative min-h-screen bg-bg font-sans text-ink">
-        <Navbar onOpenCV={() => setIsCVModalOpen(true)} />
+        {isReady && (
+          <>
+            <Navbar onOpenCV={() => setIsCVModalOpen(true)} />
 
-        <main className="relative">
-          <Hero onOpenCV={() => setIsCVModalOpen(true)} />
-          <About />
-          <Projects />
-          <Skills />
-          <Experience />
-          <Certificates />
-          <Achievements />
-          <Contact />
-        </main>
+            <main className="relative">
+              <Hero onOpenCV={() => setIsCVModalOpen(true)} />
+              <About />
+              <Projects />
+              <Skills />
+              <Experience />
+              <Certificates />
+              <Achievements />
+              <Contact />
+            </main>
 
-        <Footer />
+            <Footer />
 
-        <CVModal
-          isOpen={isCVModalOpen}
-          onClose={() => setIsCVModalOpen(false)}
-        />
+            <CVModal
+              isOpen={isCVModalOpen}
+              onClose={() => setIsCVModalOpen(false)}
+            />
+          </>
+        )}
       </div>
     </ThemeProvider>
   );

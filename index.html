@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth is-loading">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -51,6 +51,224 @@
         }
       })();
     </script>
+    <!-- ── Boot loader ───────────────────────────────────────────────────
+         These styles are inlined (not in index.css) so the animation can
+         paint on the very first frame, before the JS/CSS bundle has even
+         finished downloading. The markup below sits outside #root so React
+         never clears it — src/hooks/usePreloader.ts takes over: it ticks
+         the progress along and fades the overlay out once the portfolio
+         behind it is actually ready (fonts, images, window load).
+    ───────────────────────────────────────────────────────────────── -->
+    <style>
+      /* Lock scrolling while the loader is up so nothing shifts underneath */
+      html.is-loading,
+      html.is-loading body {
+        overflow: hidden;
+      }
+
+      #preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f7f4ee; /* matches --c-bg (light) */
+        color: #1a1816;      /* matches --c-text (light) */
+        transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+      }
+      .dark #preloader {
+        background: #151310; /* matches --c-bg (dark) */
+        color: #eeeae2;      /* matches --c-text (dark) */
+      }
+      #preloader.is-done {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .pl {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 24px;
+      }
+
+      /* Accent bloom behind the mark */
+      .pl::before {
+        content: '';
+        position: absolute;
+        top: 62px; /* centre of the 124px mark */
+        left: 50%;
+        width: min(460px, 92vw);
+        height: min(460px, 92vw);
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(8, 105, 169, 0.16), rgba(8, 105, 169, 0) 65%);
+        pointer-events: none;
+      }
+      .dark .pl::before {
+        background: radial-gradient(circle, rgba(103, 210, 245, 0.14), rgba(103, 210, 245, 0) 65%);
+      }
+
+      /* Orbiting ring + monogram */
+      .pl-mark {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 124px;
+        height: 124px;
+      }
+      .pl-ring {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        transform-origin: center; /* spin around the mark, not the viewBox corner */
+        animation: pl-spin 1.5s linear infinite;
+      }
+      .pl-ring .pl-track {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        opacity: 0.14;
+      }
+      .pl-ring .pl-arc {
+        fill: none;
+        stroke: #0669a9; /* accent (light) */
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-dasharray: 66 224;
+      }
+      .dark .pl-ring .pl-arc {
+        stroke: #67d2f5; /* accent (dark) */
+      }
+      .pl-mono {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 40px;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        background-image: linear-gradient(105deg, currentColor 40%, #0669a9 50%, currentColor 60%);
+        background-size: 220% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: pl-shimmer 2.4s ease-in-out infinite;
+      }
+      .dark .pl-mono {
+        background-image: linear-gradient(105deg, currentColor 40%, #67d2f5 50%, currentColor 60%);
+      }
+
+      .pl-kicker {
+        margin-top: 30px;
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        opacity: 0.55;
+      }
+
+      /* Name rises in letter by letter */
+      .pl-name {
+        display: flex;
+        margin-top: 10px;
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: clamp(32px, 8vw, 48px);
+        font-weight: 600;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+      }
+      .pl-name span {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(0.5em);
+        animation: pl-rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation-delay: calc(120ms + var(--i) * 55ms);
+      }
+
+      /* Progress hairline */
+      .pl-bar {
+        width: min(280px, 72vw);
+        height: 2px;
+        margin-top: 36px;
+        overflow: hidden;
+        border-radius: 9999px;
+        background: rgba(26, 24, 22, 0.12);
+      }
+      .dark .pl-bar {
+        background: rgba(238, 234, 226, 0.16);
+      }
+      .pl-bar-fill {
+        display: block;
+        height: 100%;
+        border-radius: 9999px;
+        background: #0669a9;
+        transform: scaleX(0);
+        transform-origin: 0 50%;
+        transition: transform 0.25s linear;
+      }
+      .dark .pl-bar-fill {
+        background: #67d2f5;
+      }
+
+      .pl-status {
+        margin-top: 14px;
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-variant-numeric: tabular-nums;
+        opacity: 0.6;
+      }
+
+      .pl-noscript {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 40px;
+        text-align: center;
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        opacity: 0.7;
+      }
+
+      @keyframes pl-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes pl-shimmer {
+        0%,
+        100% {
+          background-position: 110% 0;
+        }
+        50% {
+          background-position: -10% 0;
+        }
+      }
+      @keyframes pl-rise {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #preloader,
+        #preloader * {
+          animation: none !important;
+          transition-duration: 0.01ms !important;
+        }
+        .pl-name span {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
   </head>
   <body class="antialiased overflow-x-hidden min-h-screen">
     <!-- Netlify Hidden Form Target for Native Processing -->
@@ -62,6 +280,55 @@
     </form>
 
     <div id="root"></div>
+
+    <!-- Boot loader: lives outside #root on purpose — React only drives it
+         (progress + dismissal), it never renders or clears this node. -->
+    <div id="preloader" role="status" aria-label="Loading portfolio">
+      <div class="pl" aria-hidden="true">
+        <div class="pl-mark">
+          <svg class="pl-ring" viewBox="0 0 100 100" focusable="false">
+            <circle class="pl-track" cx="50" cy="50" r="46" />
+            <circle class="pl-arc" cx="50" cy="50" r="46" />
+          </svg>
+          <span class="pl-mono">KJ</span>
+        </div>
+
+        <p class="pl-kicker">Portfolio</p>
+
+        <p class="pl-name">
+          <span style="--i: 0">K</span><span style="--i: 1">a</span><span style="--i: 2">r</span><span style="--i: 3">t</span><span style="--i: 4">i</span><span style="--i: 5">k</span><span style="--i: 6">&nbsp;</span><span style="--i: 7">J</span><span style="--i: 8">o</span><span style="--i: 9">s</span><span style="--i: 10">h</span><span style="--i: 11">i</span>
+        </p>
+
+        <div class="pl-bar">
+          <span class="pl-bar-fill" data-pl-fill></span>
+        </div>
+
+        <p class="pl-status">
+          <span data-pl-count>0</span>% &mdash; <span data-pl-label>loading portfolio</span>
+        </p>
+      </div>
+
+      <noscript>
+        <p class="pl-noscript">JavaScript is required to view this portfolio.</p>
+      </noscript>
+    </div>
+
+    <script>
+      // Safety net: if the app bundle never boots (blocked/failed download),
+      // offer a retry instead of spinning forever.
+      setTimeout(function () {
+        var el = document.getElementById('preloader');
+        if (el && !el.classList.contains('is-done')) {
+          var label = el.querySelector('[data-pl-label]');
+          if (label) label.textContent = 'taking longer than expected — tap to retry';
+          el.style.cursor = 'pointer';
+          el.addEventListener('click', function () {
+            location.reload();
+          });
+        }
+      }, 15000);
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
