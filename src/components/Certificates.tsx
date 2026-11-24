@@ -18,7 +18,7 @@ export const Certificates: React.FC = () => {
           subtitle="Coursework and credentials from Microsoft, HP, Udemy and university competitions."
         />
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {certificates.map((cert, index) => (
             <motion.button
               key={cert.id}

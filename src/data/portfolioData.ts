@@ -322,6 +322,30 @@ export const certificates: CertificateItem[] = [
     image: "/certificates/udemyPython.jpg",
     badge: "Course Completion",
     date: "2025"
+  },
+  {
+    id: "cert-infosys-html",
+    title: "HTML Certification",
+    issuer: "Infosys",
+    image: "/certificates/html-infosys.jpg",
+    badge: "Course Completion",
+    date: "2025"
+  },
+  {
+    id: "cert-infosys-css",
+    title: "CSS Certification",
+    issuer: "Infosys",
+    image: "/certificates/css-infosys.jpg",
+    badge: "Course Completion",
+    date: "2025"
+  },
+  {
+    id: "cert-infosys-website-creation",
+    title: "Website Creation Certification",
+    issuer: "Infosys",
+    image: "/certificates/website_creation-infosys.jpg",
+    badge: "Course Completion",
+    date: "2025"
   }
 ];
 
