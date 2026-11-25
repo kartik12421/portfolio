@@ -346,6 +346,14 @@ export const certificates: CertificateItem[] = [
     image: "/certificates/website_creation-infosys.jpg",
     badge: "Course Completion",
     date: "2025"
+  },
+  {
+    id: "cert-infosys-js",
+    title: "JavaScript Certification",
+    issuer: "Infosys",
+    image: "/certificates/js-infosys.jpg",
+    badge: "Course Completion",
+    date: "2025"
   }
 ];
 
